@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "start:prod": "set NODE_ENV=production&& nodemon server.js",
+    "start": "ts-node server.ts",
+    "server": "nodemon server.ts",
+    "start:prod": "set NODE_ENV=production&& nodemon server.ts",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
