@@ -138,7 +138,7 @@ userSchema.methods.changedPasswordAfter = function (timestamp) {
     //Assuming timestamp is given in seconds
     if (this.passwordChangedAt) {
         //getTime() is a Date function
-        var changedTimeStamp = this.passwordChangedAt.getTime() / 1000;
+        var changedTimeStamp = parseInt(this.passwordChangedAt.getTime(), 10) / 1000;
         return changedTimeStamp > timestamp;
     }
     return false;
