@@ -73,6 +73,7 @@ var UserController = /** @class */ (function () {
     __decorate([
         decorators_1.post("/register"),
         decorators_1.use(bodyValidator_1.bodyValidator("firstName", "lastName", "email", "password")),
+        decorators_1.catchAsync,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object, Function]),
         __metadata("design:returntype", Promise)

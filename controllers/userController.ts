@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { controller, use, post, get } from "../decorators";
+import { controller, use, catchAsync, post, get } from "../decorators";
 import { Users } from "../models/Users";
 import { bodyValidator } from "../middlewares/bodyValidator";
 
@@ -7,6 +7,7 @@ import { bodyValidator } from "../middlewares/bodyValidator";
 class UserController {
 	@post("/register")
 	@use(bodyValidator("firstName", "lastName", "email", "password"))
+	@catchAsync
 	public async registerUser(req: Request, res: Response, next: NextFunction) {
 		const { firstName, lastName, email } = req.body;
 		const newUser = await Users.create({ firstName, lastName, email });

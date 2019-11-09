@@ -114,10 +114,13 @@ userSchema.pre("save", function (next) {
                     if (!this.isModified("password"))
                         return [2 /*return*/, next()];
                     saltRounds = 12;
+                    if (!this.password) return [3 /*break*/, 2];
                     _a = this;
                     return [4 /*yield*/, bcryptjs_1.default.hash(this.password, saltRounds)];
                 case 1:
                     _a.password = _b.sent();
+                    _b.label = 2;
+                case 2:
                     next();
                     return [2 /*return*/];
             }
