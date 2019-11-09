@@ -70,7 +70,7 @@ function isJSONError(err) {
 var sendErrorProd = function (err, res) {
     // Operational, trusted error: send message to client
     // Production mode: Only send meaningful,concise and easy to understand errors
-    if (isIAppError(err)) {
+    if (err instanceof AppError_1.AppError) {
         if (err.isOperational)
             res.status(err.statusCode).json({
                 status: err.status,
@@ -103,8 +103,10 @@ exports.globalErrorHandler = function (err, req, res, next) {
         if (isCastError(newError))
             newError = handleCastErrorDB(newError);
         //  Mongo Duplicate Error
-        else if (isMongoError(newError))
-            newError = handleDuplicateFieldsDB(newError);
+        else if (isMongoError(newError) && isMongoError(err)) {
+            if (err.code === 11000)
+                newError = handleDuplicateFieldsDB(newError);
+        }
         // Validation Error from mongoose
         else if (isValidationError(newError))
             newError = handleValidationErrorDB(newError);

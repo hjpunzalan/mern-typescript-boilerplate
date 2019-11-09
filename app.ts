@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import { globalErrorHandler } from "./utils/globalErrorHandler";
+import { userRoute } from "./controllers/userController";
 
 export const app = express();
 
@@ -35,5 +36,6 @@ app.use(
 		whitelist: [] // add http parameters used
 	})
 );
-
+// Route Handlers
+app.use("/api", userRoute);
 app.use(globalErrorHandler);

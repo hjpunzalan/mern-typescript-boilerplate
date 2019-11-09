@@ -1,14 +1,11 @@
 import { MetadataKeys, Methods } from "./enums";
-import express from "express";
+import express, { Router } from "express";
 import "reflect-metadata";
 
 // route prefix refers to the namespace or route the controller belongs
-export function controller(routePrefix: string) {
+export function controller(routePrefix: string, router: Router) {
 	// Target refers to the class object
 	return function(target: Function) {
-		// New Route instance
-		const router = express.Router();
-
 		// Declare all route methods inside class object Controller for specific prefix
 		for (let key in target.prototype) {
 			// Expect each method in controller class to have methods as route handlers only!

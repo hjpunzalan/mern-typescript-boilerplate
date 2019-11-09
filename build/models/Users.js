@@ -64,8 +64,8 @@ var userSchema = new mongoose_1.default.Schema({
     password: {
         type: String,
         select: false,
-        minlength: 6,
-        required: [true, "User must have a password"]
+        minlength: 6
+        // required: [true, "User must have a password"]
         // default: generator.generate({
         // 	length: 6,
         // 	numbers: true

@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		select: false, //Keeps password hidden from anywhere
-		minlength: 6,
-		required: [true, "User must have a password"]
+		minlength: 6
+		// required: [true, "User must have a password"]
 		// default: generator.generate({
 		// 	length: 6,
 		// 	numbers: true

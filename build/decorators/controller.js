@@ -1,17 +1,11 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var enums_1 = require("./enums");
-var express_1 = __importDefault(require("express"));
 require("reflect-metadata");
 // route prefix refers to the namespace or route the controller belongs
-function controller(routePrefix) {
+function controller(routePrefix, router) {
     // Target refers to the class object
     return function (target) {
-        // New Route instance
-        var router = express_1.default.Router();
         // Declare all route methods inside class object Controller for specific prefix
         for (var key in target.prototype) {
             // Expect each method in controller class to have methods as route handlers only!

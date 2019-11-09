@@ -70,18 +70,10 @@ function isJSONError(err: any): err is JsonWebTokenError {
 	return "JsonWebTokenError" in err;
 }
 
-const sendErrorProd = (
-	err:
-		| IAppError
-		| CastError
-		| MongooseError.ValidationError
-		| MongoError
-		| JsonWebTokenError,
-	res: Response
-) => {
+const sendErrorProd = (err: Error, res: Response) => {
 	// Operational, trusted error: send message to client
 	// Production mode: Only send meaningful,concise and easy to understand errors
-	if (isIAppError(err)) {
+	if (err instanceof AppError) {
 		if (err.isOperational)
 			res.status(err.statusCode).json({
 				status: err.status,
@@ -123,8 +115,9 @@ export const globalErrorHandler = (
 		// Cast Error
 		if (isCastError(newError)) newError = handleCastErrorDB(newError);
 		//  Mongo Duplicate Error
-		else if (isMongoError(newError))
-			newError = handleDuplicateFieldsDB(newError);
+		else if (isMongoError(newError) && isMongoError(err)) {
+			if (err.code === 11000) newError = handleDuplicateFieldsDB(newError);
+		}
 		// Validation Error from mongoose
 		else if (isValidationError(newError))
 			newError = handleValidationErrorDB(newError);

@@ -1,6 +1,6 @@
 import { app } from "./app";
 import dotenv from "dotenv";
-// import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // SYNC Unhandled rejections
 // listening to event uncaughtException
@@ -14,14 +14,14 @@ process.on("uncaughtException", (err: Error) => {
 dotenv.config({ path: "./config.env" });
 
 // Connecting to mongoDB using mongoose
-// const DB = process.env.DATABASE;
-// mongoose
-// 	.connect(DB, {
-// 		useNewUrlParser: true,
-// 		useCreateIndex: true,
-// 		useFindAndModify: false
-// 	})
-// 	.then(() => console.log('DB connection is successful'));
+mongoose
+	.connect(process.env.DATABASE as string, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useFindAndModify: false,
+		useUnifiedTopology: true
+	})
+	.then(() => console.log("DB connection is successful!"));
 
 // Development / Production mode
 console.log(`Server running on: ${process.env.NODE_ENV} mode`);

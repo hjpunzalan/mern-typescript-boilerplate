@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var app_1 = require("./app");
 var dotenv_1 = __importDefault(require("dotenv"));
-// import mongoose from 'mongoose';
+var mongoose_1 = __importDefault(require("mongoose"));
 // SYNC Unhandled rejections
 // listening to event uncaughtException
 process.on("uncaughtException", function (err) {
@@ -16,14 +16,14 @@ process.on("uncaughtException", function (err) {
 // Must be your own private process variables
 dotenv_1.default.config({ path: "./config.env" });
 // Connecting to mongoDB using mongoose
-// const DB = process.env.DATABASE;
-// mongoose
-// 	.connect(DB, {
-// 		useNewUrlParser: true,
-// 		useCreateIndex: true,
-// 		useFindAndModify: false
-// 	})
-// 	.then(() => console.log('DB connection is successful'));
+mongoose_1.default
+    .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+})
+    .then(function () { return console.log("DB connection is successful!"); });
 // Development / Production mode
 console.log("Server running on: " + process.env.NODE_ENV + " mode");
 var port = process.env.PORT || 8000;

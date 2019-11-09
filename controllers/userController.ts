@@ -1,13 +1,16 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, Router } from "express";
 import { controller, use, catchAsync, post, get } from "../decorators";
 import { Users } from "../models/Users";
 import { bodyValidator } from "../middlewares/bodyValidator";
 
-@controller("/user")
+export const userRoute = Router();
+
+// commented out password in user model
+@controller("/user", userRoute)
 class UserController {
 	@post("/register")
-	@use(bodyValidator("firstName", "lastName", "email", "password"))
-	@catchAsync
+	@use(bodyValidator("firstName", "lastName", "email"))
+	// @catchAsync
 	public async registerUser(req: Request, res: Response, next: NextFunction) {
 		const { firstName, lastName, email } = req.body;
 		const newUser = await Users.create({ firstName, lastName, email });

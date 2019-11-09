@@ -44,9 +44,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
 var decorators_1 = require("../decorators");
 var Users_1 = require("../models/Users");
 var bodyValidator_1 = require("../middlewares/bodyValidator");
+exports.userRoute = express_1.Router();
+// commented out password in user model
 var UserController = /** @class */ (function () {
     function UserController() {
     }
@@ -72,14 +75,13 @@ var UserController = /** @class */ (function () {
     };
     __decorate([
         decorators_1.post("/register"),
-        decorators_1.use(bodyValidator_1.bodyValidator("firstName", "lastName", "email", "password")),
-        decorators_1.catchAsync,
+        decorators_1.use(bodyValidator_1.bodyValidator("firstName", "lastName", "email")),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object, Function]),
         __metadata("design:returntype", Promise)
     ], UserController.prototype, "registerUser", null);
     UserController = __decorate([
-        decorators_1.controller("/user")
+        decorators_1.controller("/user", exports.userRoute)
     ], UserController);
     return UserController;
 }());
