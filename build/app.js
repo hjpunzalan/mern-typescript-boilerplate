@@ -9,6 +9,7 @@ var morgan_1 = __importDefault(require("morgan"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
 var hpp_1 = __importDefault(require("hpp"));
+var globalErrorHandler_1 = require("./utils/globalErrorHandler");
 exports.app = express_1.default();
 //////////////////////// Global Middlewares//////////////////////////
 // Add htp headers that secure the server
@@ -30,3 +31,4 @@ exports.app.use(express_mongo_sanitize_1.default());
 exports.app.use(hpp_1.default({
     whitelist: [] // add http parameters used
 }));
+exports.app.use(globalErrorHandler_1.globalErrorHandler);

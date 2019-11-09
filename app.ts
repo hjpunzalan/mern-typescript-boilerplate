@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
+import { globalErrorHandler } from "./utils/globalErrorHandler";
 
 export const app = express();
 
@@ -34,3 +35,5 @@ app.use(
 		whitelist: [] // add http parameters used
 	})
 );
+
+app.use(globalErrorHandler);

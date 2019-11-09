@@ -1,15 +1,17 @@
-class AppError extends Error {
-	statusCode: Number | string;
-	private status: string;
-	private isOperational: boolean;
+export interface IAppError extends Error {
+	status: string;
+	statusCode: number;
+	isOperational: boolean;
+}
 
-	constructor(message: string, statusCode: Number | string) {
+export class AppError extends Error implements IAppError {
+	isOperational = true; // To identify operational errors from programming errors, Only operational errors are handled by this class
+	status: string;
+	statusCode = 500;
+
+	constructor(message: string, statusCode: number) {
 		super(message);
-		this.statusCode = statusCode;
 		this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-		this.isOperational = true; // To identify operational errors from programming errors, Only operational errors are handled by this class
 		Error.captureStackTrace(this, this.constructor);
 	}
 }
-
-module.exports = AppError;
