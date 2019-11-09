@@ -10,7 +10,7 @@ export const userRoute = Router();
 class UserController {
 	@post("/register")
 	@use(bodyValidator("firstName", "lastName", "email"))
-	// @catchAsync
+	@catchAsync
 	public async registerUser(req: Request, res: Response, next: NextFunction) {
 		const { firstName, lastName, email } = req.body;
 		const newUser = await Users.create({ firstName, lastName, email });

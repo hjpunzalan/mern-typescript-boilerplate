@@ -10,7 +10,6 @@ export function catchAsync(
 	key: string,
 	desc: RouteHandlerDescriptor
 ) {
-	console.log("catchAsync works");
 	const method = target[key];
 
 	desc.value = (req: Request, res: Response, next: NextFunction) => {

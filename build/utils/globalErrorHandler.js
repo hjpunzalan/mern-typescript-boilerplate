@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var AppError_1 = require("./AppError");
+var mongoDB_1 = require("mongoDB");
 // MonogoDB and mongoose use export Error types as Classes
 // Invalid ids
 var handleCastErrorDB = function (err) {
@@ -99,6 +100,7 @@ exports.globalErrorHandler = function (err, req, res, next) {
         sendErrorDev(err, res);
     }
     else if (process.env.NODE_ENV === "production") {
+        console.log(err instanceof mongoDB_1.MongoError);
         // Cast Error
         if (isCastError(newError))
             newError = handleCastErrorDB(newError);
