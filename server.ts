@@ -34,13 +34,18 @@ const server = app.listen(port, () => {
 // ASYNC Promises
 // process object will emmit unhandled rejection
 // promise rejection to have last safety nets
-process.on("unhandledRejection", (err: Error, promise: Promise<any>) => {
-	console.log("UNHANDLED REJECTION! Shutting down...");
-	console.log(`AT ${promise}`, err.name, err.message);
-	server.close(() => {
-		//  BY having server.close finishes all request that is being handled then closes the app
-		process.exit(1); // 0 success , 1 for unhandled rejection
-	});
-});
+
+process.on(
+	"unhandledRejection",
+	(reason: Error | unknown | any, promise: Promise<any>): void => {
+		console.log("UNHANDLED REJECTION! Shutting down...");
+		if (reason instanceof Error)
+			console.log(`AT ${promise}`, reason.name, reason.message);
+		server.close(() => {
+			//  BY having server.close finishes all request that is being handled then closes the app
+			process.exit(1); // 0 success , 1 for unhandled rejection
+		});
+	}
+);
 
 // Need a tool that restarts application

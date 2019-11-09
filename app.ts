@@ -1,10 +1,9 @@
-import express from 'express';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import mongoSanitize from 'express-mongo-sanitize';
-import xss from 'xss-clean';
-import hpp from 'hpp';
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import mongoSanitize from "express-mongo-sanitize";
+import hpp from "hpp";
 
 export const app = express();
 
@@ -13,12 +12,12 @@ export const app = express();
 app.use(helmet());
 
 // Development logging
-if (process.env.NODE_ENV === 'development') {
-	app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+	app.use(morgan("dev"));
 }
 
 // Converts incoming json data to js object ---- Body parser that reads data from body into req.body
-app.use(express.json({ limit: '10kb' })); // package will parse 10kb into meaningful data
+app.use(express.json({ limit: "10kb" })); // package will parse 10kb into meaningful data
 
 // Cookie parser
 app.use(cookieParser());
@@ -26,10 +25,6 @@ app.use(cookieParser());
 // Data sanitization against NoSQL query injection
 //Look at the req and filter out all '$' and '.' that sends queries to db illegaly
 app.use(mongoSanitize());
-
-// Data sanitization again XSS ( cross site scripting attacks)
-// Sanitizes incoming http request from req.body
-app.use(xss()); // Converts malicious html code into dull code
 
 // Prevent parameter pollution
 // prevents adding duplicated parameters in query
