@@ -1,6 +1,5 @@
-import { MetadataKeys } from "./enums/MetadataKeys";
+import { MetadataKeys, Methods } from "./enums";
 import "reflect-metadata";
-import { Methods } from "./enums/Methods";
 import { RequestHandler } from "express";
 
 // This helps prevents route decorator being misplaced on the wrong method eg. add or subtract function thats not a handler
@@ -22,3 +21,4 @@ function routeBinder(method: string) {
 export const get = routeBinder(Methods.Get);
 export const post = routeBinder(Methods.Post);
 export const put = routeBinder(Methods.Put);
+export const del = routeBinder(Methods.Del);
