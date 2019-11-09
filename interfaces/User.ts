@@ -5,7 +5,7 @@ export interface IUser extends Document {
 	lastName: string;
 	email: string;
 	photo?: string;
-	password: string;
+	password: string | undefined;
 	active: boolean;
 	role: string;
 	lastEdited: Date;

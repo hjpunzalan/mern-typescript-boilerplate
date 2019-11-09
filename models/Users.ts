@@ -112,6 +112,4 @@ userSchema.methods.createPasswordResetToken = function(this: IUser): string {
 	return resetToken; // returns unhashed token
 };
 
-const Users = mongoose.model("Users", userSchema);
-
-module.exports = Users;
+export const Users = mongoose.model<IUser>("Users", userSchema);
