@@ -103,6 +103,14 @@ export const globalErrorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
+	console.log(
+		isIAppError(err),
+		isCastError(err),
+		isJSONError(err),
+		isMongoError(err),
+		isValidationError(err),
+		err instanceof Error
+	);
 	if (isIAppError(err)) {
 		err.status = err.status || "error";
 		err.statusCode = err.statusCode || 500;
@@ -112,7 +120,6 @@ export const globalErrorHandler = (
 	if (process.env.NODE_ENV === "development") {
 		sendErrorDev(err as IAppError, res);
 	} else if (process.env.NODE_ENV === "production") {
-		console.log(err instanceof MongoError);
 		// Cast Error
 		if (isCastError(newError)) newError = handleCastErrorDB(newError);
 		//  Mongo Duplicate Error
