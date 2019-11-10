@@ -53,29 +53,28 @@ var sendErrorDev = function (err, res) {
 };
 // Custom type guards
 function isIAppError(err) {
-    return "IAppError" in err;
+    return "isOperational" in err; // isOperational errors
 }
 function isCastError(err) {
-    return "CastError" in err;
+    return err.name === "CastError"; // defined by type
 }
 function isValidationError(err) {
-    return "Error.ValidationError" in err;
+    return err.name === "ValidationError"; // defined by type
 }
-function isMongoError(err) {
-    return "MongoError" in err;
+function isDuplicateError(err) {
+    return err.code === 11000; // code for DuplicateFields
 }
 function isJSONError(err) {
-    return "JsonWebTokenError" in err;
+    return err.name === "JsonWebTokenError";
 }
 var sendErrorProd = function (err, res) {
     // Operational, trusted error: send message to client
     // Production mode: Only send meaningful,concise and easy to understand errors
-    if (err instanceof AppError_1.AppError) {
-        if (err.isOperational)
-            res.status(err.statusCode).json({
-                status: err.status,
-                message: err.message
-            });
+    if (isIAppError(err)) {
+        res.status(err.statusCode).json({
+            status: err.status,
+            message: err.message
+        });
         // Programming or other unknown errors
     }
     else {
@@ -90,7 +89,7 @@ var sendErrorProd = function (err, res) {
 };
 // Error handler passed from controllers
 exports.globalErrorHandler = function (err, req, res, next) {
-    console.log(isIAppError(err), isCastError(err), isJSONError(err), isMongoError(err), isValidationError(err), err instanceof Error);
+    console.log(isIAppError(err), isCastError(err), isJSONError(err), isDuplicateError(err), isValidationError(err), err instanceof Error);
     if (isIAppError(err)) {
         err.status = err.status || "error";
         err.statusCode = err.statusCode || 500;
@@ -104,9 +103,8 @@ exports.globalErrorHandler = function (err, req, res, next) {
         if (isCastError(newError))
             newError = handleCastErrorDB(newError);
         //  Mongo Duplicate Error
-        else if (isMongoError(newError) && isMongoError(err)) {
-            if (err.code === 11000)
-                newError = handleDuplicateFieldsDB(newError);
+        else if (isDuplicateError(newError)) {
+            newError = handleDuplicateFieldsDB(newError);
         }
         // Validation Error from mongoose
         else if (isValidationError(newError))
