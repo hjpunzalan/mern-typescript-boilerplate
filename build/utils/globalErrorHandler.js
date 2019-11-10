@@ -89,7 +89,6 @@ var sendErrorProd = function (err, res) {
 };
 // Error handler passed from controllers
 exports.globalErrorHandler = function (err, req, res, next) {
-    console.log(isIAppError(err), isCastError(err), isJSONError(err), isDuplicateError(err), isValidationError(err), err instanceof Error);
     if (isIAppError(err)) {
         err.status = err.status || "error";
         err.statusCode = err.statusCode || 500;
