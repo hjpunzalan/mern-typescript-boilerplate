@@ -1,7 +1,8 @@
+// interface can be used as other error class types such as MongoError, MongooseError, Validation Error
 export interface IAppError extends Error {
 	status: string;
 	statusCode: number;
-	isOperational: boolean;
+	isOperational?: boolean;
 }
 
 export class AppError extends Error implements IAppError {

@@ -42,15 +42,6 @@ const handleJWTError = (err: JsonWebTokenError) => {
 	return new AppError("Invalid token. Please log in again!", 401);
 };
 
-const sendErrorDev = (err: IAppError, res: Response) => {
-	res.status(err.statusCode).json({
-		status: err.status,
-		message: err.message,
-		error: err,
-		stack: err.stack // stack trace
-	});
-};
-
 // Custom type guards
 function isIAppError(err: any): err is IAppError {
 	return "isOperational" in err; // isOperational errors
@@ -89,6 +80,14 @@ const sendErrorProd = (err: Error | IAppError, res: Response) => {
 		});
 	}
 };
+const sendErrorDev = (err: IAppError, res: Response) => {
+	res.status(err.statusCode).json({
+		status: err.status,
+		message: err.message,
+		error: err,
+		stack: err.stack // stack trace
+	});
+};
 
 // Error handler passed from controllers
 export const globalErrorHandler = (
@@ -103,14 +102,15 @@ export const globalErrorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
+	// Define additional error properties
+	let newError = { ...err, status: "error", statusCode: 500 };
 	if (isIAppError(err)) {
-		err.status = err.status || "error";
-		err.statusCode = err.statusCode || 500;
+		newError.status = err.status;
+		newError.statusCode = err.statusCode;
 	}
 
-	let newError = { ...err };
 	if (process.env.NODE_ENV === "development") {
-		sendErrorDev(err as IAppError, res);
+		sendErrorDev(newError as IAppError, res);
 	} else if (process.env.NODE_ENV === "production") {
 		// Cast Error
 		if (isCastError(newError)) newError = handleCastErrorDB(newError);
