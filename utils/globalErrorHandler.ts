@@ -103,6 +103,7 @@ export const globalErrorHandler = (
 	next: NextFunction
 ) => {
 	// Define additional error properties
+	// Union types doesn't let redefining of parameters (err)
 	let newError = { ...err, status: "error", statusCode: 500 };
 	if (isIAppError(err)) {
 		newError.status = err.status;
