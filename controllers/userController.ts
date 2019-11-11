@@ -10,11 +10,16 @@ export const userRoute = Router();
 @controller("/users", userRoute)
 class UserController {
 	@post("/register")
-	@use(bodyValidator("firstName", "lastName", "email"))
+	@use(bodyValidator("firstName", "lastName", "email", "password"))
 	@catchAsync
 	async registerUser(req: Request, res: Response, next: NextFunction) {
-		const { firstName, lastName, email } = req.body;
-		const newUser = await Users.create({ firstName, lastName, email });
+		const { firstName, lastName, email, password } = req.body;
+		const newUser = await Users.create({
+			firstName,
+			lastName,
+			email,
+			password
+		});
 
 		// remove password from json output;
 		newUser.password = undefined;
@@ -27,6 +32,7 @@ class UserController {
 	@get("/")
 	@catchAsync
 	async getAllUsers(req: Request, res: Response, next: NextFunction) {
+		//add queryHandling
 		const query = Users.find();
 		const features = new QueryHandling(query, req.query).sort().filter();
 		const users = await features.query;

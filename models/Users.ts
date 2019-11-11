@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		select: false, //Keeps password hidden from anywhere
-		minlength: 6
-		// required: [true, "User must have a password"]
+		minlength: 6,
+		required: [true, "User must have a password"]
 		// default: generator.generate({
 		// 	length: 6,
 		// 	numbers: true
@@ -70,8 +70,8 @@ userSchema.pre<IUser>("save", function(next) {
 userSchema.pre<IUser>("save", async function(next) {
 	// Only run this function if password was actually modified
 	// Changing password or password creation eg. new password
+	console.log("hello");
 	if (!this.isModified("password")) return next();
-
 	const saltRounds = 12;
 	if (this.password)
 		this.password = await bcrypt.hash(this.password, saltRounds);
