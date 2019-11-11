@@ -104,14 +104,15 @@ export const globalErrorHandler = (
 ) => {
 	// Define additional error properties
 	// Union types doesn't let redefining of parameters (err)
-	let newError = { ...err, status: "error", statusCode: 500 };
-	if (isIAppError(err)) {
-		newError.status = err.status;
-		newError.statusCode = err.statusCode;
-	}
+	let newError = { ...err };
 
 	if (process.env.NODE_ENV === "development") {
-		sendErrorDev(newError as IAppError, res);
+		// destructuring doesnt work with error
+		if (isIAppError(err)) sendErrorDev(err, res);
+		else {
+			newError = { ...newError, status: "error", statusCode: 500 };
+			sendErrorDev(newError, res);
+		}
 	} else if (process.env.NODE_ENV === "production") {
 		// Cast Error
 		if (isCastError(newError)) newError = handleCastErrorDB(newError);
@@ -126,11 +127,12 @@ export const globalErrorHandler = (
 		else if (isJSONError(newError)) newError = handleJWTError(newError);
 		//
 		else {
-			// in production mode, destructuring doesnt work with error
+			//  destructuring doesnt work with error as some properties can not be destructured
+			// Other errors that wasn't handled but passed as appError
 			sendErrorProd(err, res);
 			return next();
 		}
-		// Send error to client
+		// Send newError to client
 		sendErrorProd(newError, res);
 	}
 };
