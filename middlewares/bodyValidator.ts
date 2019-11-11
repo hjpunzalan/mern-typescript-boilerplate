@@ -10,7 +10,7 @@ export function bodyValidator(...keys: string[]): RequestHandler {
 
 		for (let key of keys) {
 			if (!req.body[key]) {
-				next(new AppError(`Missing ${key}!`, 422));
+				return next(new AppError(`Missing ${key}!`, 422));
 			}
 		}
 		next();
