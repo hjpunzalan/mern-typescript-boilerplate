@@ -1,5 +1,8 @@
-import { app } from "./app";
 import dotenv from "dotenv";
+// Must be your own private process variables
+dotenv.config({ path: "./config.env" });
+
+import { app } from "./app";
 import mongoose from "mongoose";
 
 // SYNC Unhandled rejections
@@ -9,9 +12,6 @@ process.on("uncaughtException", (err: Error) => {
 	console.log(err.name, err.message);
 	process.exit(1); // 0 success , 1 for unhandled rejection
 });
-
-// Must be your own private process variables
-dotenv.config({ path: "./config.env" });
 
 // Connecting to mongoDB using mongoose
 mongoose
