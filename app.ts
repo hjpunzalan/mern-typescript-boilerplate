@@ -1,9 +1,10 @@
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
+import session from "express-session";
+import { AppError } from "./utils/appError";
 import { globalErrorHandler } from "./utils/globalErrorHandler";
 import { userRoute } from "./controllers/userController";
 
@@ -21,8 +22,24 @@ if (process.env.NODE_ENV === "development") {
 // Converts incoming json data to js object ---- Body parser that reads data from body into req.body
 app.use(express.json({ limit: "10kb" })); // package will parse 10kb into meaningful data
 
-// Cookie parser
-app.use(cookieParser());
+if (process.env.SESSION_SECRET)
+	app.use(
+		session({
+			secret: process.env.SESSION_SECRET,
+			name: "sid",
+			resave: false, // prevents resave even if not modified
+			saveUninitialized: false,
+			cookie: {
+				// maxAge: SESS_LIFETIME, // remove if we want it as a session
+				sameSite: true, // 'strict'
+				secure: process.env.NODE_ENV === "production" ? true : false
+			}
+		})
+	);
+else
+	app.use((req, res, next) => {
+		next(new AppError("missing session secret", 500));
+	});
 
 // Data sanitization against NoSQL query injection
 //Look at the req and filter out all '$' and '.' that sends queries to db illegaly
@@ -36,6 +53,7 @@ app.use(
 		whitelist: [] // add http parameters used
 	})
 );
+
 // Route Handlers
 app.use("/api", userRoute);
 app.use(globalErrorHandler);
