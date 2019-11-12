@@ -12,4 +12,7 @@ export interface IUser extends Document {
 	passwordChangedAt: Date | number;
 	passwordResetToken: String;
 	passwordResetExpires: Date | number;
+	checkPassword: (password: string, checkPassword: string) => Promise<boolean>;
+	changedPasswordAfter: (timestamp: number | Date) => boolean;
+	createPasswordResetToken: () => string;
 }

@@ -3,6 +3,7 @@ import { controller, use, catchAsync, post, get } from "../decorators";
 import { Users } from "../models/Users";
 import { bodyValidator } from "../middlewares/bodyValidator";
 import { QueryHandling } from "./../utils/queryHandling";
+import { requireAuth } from "../middlewares/requireAuth";
 
 export const userRoute = Router();
 
@@ -30,6 +31,7 @@ class UserController {
 	}
 
 	@get("/")
+	@use(requireAuth)
 	@catchAsync
 	async getAllUsers(req: Request, res: Response, next: NextFunction) {
 		//add queryHandling
