@@ -5,6 +5,7 @@ import { AppError } from "./../utils/appError";
 import { bodyValidator } from "../middlewares/bodyValidator";
 import { QueryHandling } from "./../utils/queryHandling";
 import { requireAuth } from "../middlewares/requireAuth";
+import { Email } from "../utils/Email";
 
 export const authRoute = Router();
 
@@ -60,7 +61,7 @@ class UserController {
   @post("/forgotpassword")
   @catchAsync
   async forgotPassword(req: Request, res: Response, next: NextFunction) {
-    //  Get user based on POSTed email
+    //  Get user based on POSTed email from user input
     const user = await Users.findOne({ email: req.body.email });
     if (!user) {
       return next(
@@ -69,10 +70,11 @@ class UserController {
     }
     // Generate the random reset token
     const resetToken = user.createPasswordResetToken();
+    //   Password reset token added to user document and should be saved
     await user.save({ validateBeforeSave: false }); // modified the user document ... disabled validators before save
 
     // Not enough to catch error in global error handling and use catchAsync
-    // Need to send back the reset password token and expiration
+    // Need to also delete/undefined the reset password token and expiration
     try {
       const resetURL = req.body.url + "/reset/" + resetToken;
 

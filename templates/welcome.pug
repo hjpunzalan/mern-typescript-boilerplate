@@ -1,0 +1,15 @@
+extends baseEmail
+block content
+    p Hi #{firstName},
+    p Welcome to *insert company name*, we're glad to have you 🎉🎉
+    table.btn.btn-primary(role='presentation' border='0' cellpadding='0' cellspacing='0')
+        tbody
+            tr
+                td(align='left')
+                    table(role='presentation' border='0' cellpadding='0' cellspacing='0')
+                        tbody
+                            tr
+                                td
+                                    //- a(href=`${url}` target='_blank') Set up account
+    p See you on the other side!
+    p - Jonathan Punzalan

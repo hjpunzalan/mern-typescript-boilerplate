@@ -19,7 +19,7 @@ export class Email {
     this.from = `Jonathan Punzalan <${process.env.EMAIL_FROM}>`;
   }
 
-  newTransport() {
+  private newTransport() {
     if (process.env.NODE_ENV === "production") {
       // Sendgrid
       return nodemailer.createTransport({
@@ -47,7 +47,8 @@ export class Email {
     //Template is an html template to be sent
     // Send the actual email
     // 1) Render HTML using pug
-    const html = pug.renderFile(`${__dirname}/templates/${template}.pug`, {
+    // Insert props such as firstName, url and subject
+    const html = pug.renderFile(`${__dirname}/../templates/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
       subject,
@@ -67,11 +68,11 @@ export class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendWelcome() {
+  public async sendWelcome() {
     await this.send("welcome", "Welcome new member!");
   }
 
-  async sendPasswordReset() {
+  public async sendPasswordReset() {
     await this.send(
       "passwordReset",
       "Forgotten password reset link (valid for only 10 minutes)"
