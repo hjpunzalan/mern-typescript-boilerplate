@@ -85,6 +85,7 @@ userSchema.methods.checkPassword = async function(
   return await bcrypt.compare(password, hashedPassword);
 };
 
+// For changing password -- to keep track of
 userSchema.methods.changedPasswordAfter = function(
   this: IUser,
   timestamp: Date | number

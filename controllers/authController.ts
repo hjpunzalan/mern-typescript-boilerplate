@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
+import crypto from "crypto";
 import { controller, use, catchAsync, post, get } from "../decorators";
 import { Users } from "../models/Users";
 import { AppError } from "./../utils/appError";
@@ -42,7 +43,7 @@ class UserController {
     // Add to session
     if (req.session) {
       req.session.loggedIn = true;
-      req.session.user = user;
+      req.session.userId = user;
     }
 
     res.status(200).json(user);
@@ -96,5 +97,49 @@ class UserController {
         )
       );
     }
+  }
+
+  @post("/resetpassword/:token")
+  @use(bodyValidator("password"))
+  @catchAsync
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    // 1) Get user based on the token
+    // sha256 is the name of the algorithm
+    // Hash the token from email
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    //// If expiry is greater than now(or undefined), then its not expired
+    // Finds user
+    const user = await Users.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: {
+        $gt: Date.now()
+      } // mongoDB can convert different format into the same to compare eg. miliseconds
+    });
+
+    // 2) If token has not expired, and there is user, set the new password
+    // Check if user is found
+    if (!user) {
+      return next(new AppError("Token is invalid or has expired", 400));
+    }
+
+    // modify data
+    user.password = req.body.password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save(); // use save to run validators again because find and update wont
+
+    // 3) Update changePasswordAt property of the user
+    // DONE in pre middleware of User schema
+
+    // 4) Log the user in using session
+    if (req.session) {
+      req.session.loggedIn = true;
+      req.session.userId = user.id;
+    }
+    res.status(200).json(user);
   }
 }
