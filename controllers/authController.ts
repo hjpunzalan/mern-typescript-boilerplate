@@ -56,4 +56,43 @@ class UserController {
         res.status(200).send("User logged out");
       });
   }
+
+  @post("/forgotpassword")
+  @catchAsync
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    //  Get user based on POSTed email
+    const user = await Users.findOne({ email: req.body.email });
+    if (!user) {
+      return next(
+        new AppError("There is no user with this email address", 404)
+      );
+    }
+    // Generate the random reset token
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false }); // modified the user document ... disabled validators before save
+
+    // Not enough to catch error in global error handling and use catchAsync
+    // Need to send back the reset password token and expiration
+    try {
+      const resetURL = req.body.url + "/reset/" + resetToken;
+
+      await new Email(user, resetURL).sendPasswordReset();
+
+      res.status(200).json({
+        status: "success",
+        message: "Token sent to email!"
+      });
+    } catch (error) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false }); // dont need to revalidate
+      console.error(error);
+      return next(
+        new AppError(
+          "There was an error sending the email. Try again later",
+          500
+        )
+      );
+    }
+  }
 }
