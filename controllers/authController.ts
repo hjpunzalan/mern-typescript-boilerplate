@@ -78,7 +78,7 @@ class UserController {
     try {
       const resetURL = req.body.url + "/reset/" + resetToken;
 
-      await new Email(user, resetURL).sendPasswordReset();
+      await new Email(user).sendPasswordReset(resetToken, resetURL);
 
       res.status(200).json({
         status: "success",

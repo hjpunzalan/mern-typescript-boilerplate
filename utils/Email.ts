@@ -7,15 +7,11 @@ import { IUser } from "../interfaces/User";
 export class Email {
   to: string;
   firstName: string;
-  url: string;
-  password?: string;
   from: string;
 
-  constructor(user: IUser, url: string) {
+  constructor(user: IUser) {
     this.to = user.email;
     this.firstName = user.firstName;
-    this.url = url;
-    this.password = user.password;
     this.from = `Jonathan Punzalan <${process.env.EMAIL_FROM}>`;
   }
 
@@ -50,7 +46,6 @@ export class Email {
     // Insert props such as firstName, url and subject
     const html = pug.renderFile(`${__dirname}/../templates/${template}.pug`, {
       firstName: this.firstName,
-      url: this.url,
       subject,
       ...props
     });
@@ -72,10 +67,11 @@ export class Email {
     await this.send("welcome", "Welcome new member!");
   }
 
-  public async sendPasswordReset() {
+  public async sendPasswordReset(resetToken?: string, url?: string) {
     await this.send(
       "passwordReset",
-      "Forgotten password reset link (valid for only 10 minutes)"
+      "Forgotten password reset link (valid for only 10 minutes)",
+      { resetToken, url }
     );
   }
 }
