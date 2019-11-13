@@ -8,7 +8,7 @@ export interface IUser extends Document {
   password: string | undefined;
   active: boolean;
   role: string;
-  lastEdited: Date;
+  lastEdited: Date | number;
   passwordChangedAt?: Date | number;
   passwordResetToken?: String;
   passwordResetExpires?: Date | number;
