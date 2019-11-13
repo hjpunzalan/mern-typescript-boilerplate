@@ -90,11 +90,11 @@ userSchema.methods.changedPasswordAfter = function(
   this: IUser,
   timestamp: Date | number
 ): boolean {
-  //Assuming timestamp is given in seconds
   if (this.passwordChangedAt) {
     //getTime() is a Date function
-    const changedTimeStamp = (this.passwordChangedAt as Date).getTime() / 1000;
-    return changedTimeStamp > timestamp;
+    //Assuming timestamp is given in seconds
+    // const changedTimeStamp = (this.passwordChangedAt as Date).getTime() / 1000; // for jwt timestamp
+    return this.passwordChangedAt > timestamp;
   }
   return false;
 };

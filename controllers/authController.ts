@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction, Router } from "express";
 import crypto from "crypto";
-import { controller, use, catchAsync, post, get } from "../decorators";
+import { controller, use, catchAsync, post, get, patch } from "../decorators";
 import { Users } from "../models/Users";
 import { AppError } from "./../utils/appError";
 import { bodyValidator } from "../middlewares/bodyValidator";
-import { QueryHandling } from "./../utils/queryHandling";
 import { requireAuth } from "../middlewares/requireAuth";
 import { Email } from "../utils/Email";
 
@@ -44,6 +43,7 @@ class UserController {
     if (req.session) {
       req.session.loggedIn = true;
       req.session.userId = user;
+      req.session.date = Date.now();
     }
 
     res.status(200).json(user);
@@ -99,7 +99,7 @@ class UserController {
     }
   }
 
-  @post("/resetpassword/:token")
+  @patch("/resetpassword/:token")
   @use(bodyValidator("password"))
   @catchAsync
   async resetPassword(req: Request, res: Response, next: NextFunction) {
@@ -141,5 +141,46 @@ class UserController {
       req.session.userId = user.id;
     }
     res.status(200).json(user);
+  }
+
+  @post("/changepassword")
+  @use(requireAuth, bodyValidator("password", "newPassword"))
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    console.log(req.body);
+    const { password, newPassword } = req.body;
+
+    // 1) Get user from collection
+    // forces select to be true and find if user exist
+    // req.user was from requireAuth middleware session to make sure user is logged in
+    if (req.session) {
+      const user = await Users.findById(req.session.userId).select("+password");
+
+      // 2) Check if POSTed current password is correct
+      if (
+        user &&
+        user.password &&
+        !(await user.checkPassword(password, user.password))
+      ) {
+        return next(
+          new AppError("Please enter the correct current password.", 401)
+        );
+      } else if (user) {
+        // 3) If so, update password
+        user.password = newPassword;
+        // validators in Schema happen after saving into Document
+        // User.findByIdAndUpdate will not work as intended!
+        await user.save();
+
+        user.password = undefined;
+
+        // 4) Password changed at and password needs to be modified
+        //   Added middlewares that updates passwordChanged and password
+        //   requireAuth  takes into account changedPasswordAfter ( changed password while logged in)
+        // Set new date for the user changing the password to be still logged in but windows will be logged out
+        req.session.date = Date.now();
+        res.status(200).json(user);
+      }
+    } else
+      next(new AppError(" No session found. User may not be logged in!", 403));
   }
 }
