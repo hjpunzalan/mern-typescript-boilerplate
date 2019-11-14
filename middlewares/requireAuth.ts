@@ -12,14 +12,14 @@ export async function requireAuth(
     const user = await Users.findById(req.session.userId).select(
       "+passwordChangedAt"
     );
-    if (user && !user.changedPasswordAfter(req.session.date)) return next();
-  }
-  // This to logout / destroy session of any users logged in when password was changed
-  if (req.session) {
-    req.session.destroy((err: Error) => {
-      if (err) return next(err);
-      res.clearCookie("sid");
-    });
+    // This to logout / destroy session of any users logged in when password was changed
+    // If user is deactivated auth is invalid
+    if (!user || (user && user.changedPasswordAfter(req.session.date))) {
+      req.session.destroy((err: Error) => {
+        if (err) return next(err);
+        res.clearCookie("sid");
+      });
+    } else return next();
   }
   return next(
     new AppError("You are not logged in! Please log in to gain access.", 403)

@@ -19,7 +19,7 @@ class UserController {
     const { email, password } = req.body;
 
     // Password by default is not selected
-    const user = await Users.findOne({ email }).select("+password");
+    const user = await Users.findOne({ email }).select("+password +active");
 
     // Verify user exist and password is correct
     if (

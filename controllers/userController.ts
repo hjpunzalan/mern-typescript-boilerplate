@@ -1,6 +1,14 @@
 import { AppError } from "./../utils/appError";
 import { Request, Response, NextFunction, Router } from "express";
-import { controller, use, catchAsync, post, get, patch } from "../decorators";
+import {
+  controller,
+  use,
+  catchAsync,
+  post,
+  get,
+  patch,
+  del
+} from "../decorators";
 import { Users } from "../models/Users";
 import { bodyValidator } from "../middlewares/bodyValidator";
 import { QueryHandling } from "./../utils/queryHandling";
@@ -48,6 +56,7 @@ class UserController {
   @catchAsync
   async updateMe(req: Request, res: Response, next: NextFunction) {
     // Update user document
+    //   Since body is of any type, checkBody ignore other object keys not specified
     const filterBody = checkBody(req.body, next, [
       "firstName",
       "lastName",
@@ -65,5 +74,16 @@ class UserController {
       );
       res.status(200).json(user);
     } else return next(new AppError("No session token found", 402));
+  }
+
+  @del("/deleteme")
+  @use(requireAuth)
+  @catchAsync
+  async deleteMe(req: Request, res: Response, next: NextFunction) {
+    if (req.session) {
+      await Users.findByIdAndUpdate(req.session.userId, { active: false });
+      res.status(204);
+    }
+    next(new AppError("User not logged in", 403));
   }
 }
