@@ -81,8 +81,10 @@ class UserController {
   @catchAsync
   async deleteMe(req: Request, res: Response, next: NextFunction) {
     if (req.session) {
-      await Users.findByIdAndUpdate(req.session.userId, { active: false });
-      res.status(204);
+      const user = await Users.findByIdAndUpdate(req.session.userId, {
+        active: false
+      });
+      return res.status(204).json(user);
     }
     next(new AppError("User not logged in", 403));
   }

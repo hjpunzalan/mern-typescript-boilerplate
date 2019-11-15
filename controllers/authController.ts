@@ -12,6 +12,7 @@ export const authRoute = Router();
 // commented out password in user model
 @controller("/auth", authRoute)
 class UserController {
+  // work to do: reactivate when logging in
   @post("/login")
   @use(bodyValidator("email", "password"))
   @catchAsync
@@ -19,8 +20,20 @@ class UserController {
     const { email, password } = req.body;
 
     // Password by default is not selected
-    const user = await Users.findOne({ email }).select("+password +active");
+    let user = await Users.findOne({ email }).select("+password");
 
+    // If user's account has been deactivated by user, reactivate it.
+    if (!user) {
+      const activateUser = await Users.updateOne(
+        { email },
+        {
+          active: true
+        }
+      );
+      // Only search user if user exist
+      if (activateUser.n)
+        user = await Users.findOne({ email }).select("+password");
+    }
     // Verify user exist and password is correct
     if (
       !user ||
@@ -29,12 +42,6 @@ class UserController {
       return next(
         new AppError("Invalid email or password. Please try again.", 401)
       );
-
-    if (!user.active) {
-      // If user's account has been deactivated, reactivate it.
-      user.active = true;
-      await user.save();
-    }
 
     // remove users password from response
     user.password = undefined;
