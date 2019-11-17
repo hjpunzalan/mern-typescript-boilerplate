@@ -1,17 +1,15 @@
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
-import rootReducer from "./reducers";
+import { reducers } from "./reducers";
 
-const initialState = {};
-
+// thunk allows async dispatch
 const middleware = [thunk];
 const composeEnhancers = composeWithDevTools({ trace: true }); //allows tracing
 
 const store = createStore(
-  rootReducer,
-  initialState,
-  composeEnhancers(applyMiddleware(...middleware))
+	reducers,
+	composeEnhancers(applyMiddleware(...middleware))
 );
 
 export default store;

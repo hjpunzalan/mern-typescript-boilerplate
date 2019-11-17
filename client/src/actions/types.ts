@@ -1,10 +1,13 @@
-import { IRegisterUser } from "./users";
+import { RegUserAction } from "./users";
+import { LoginAction } from "./auth";
 
 export enum ActionTypes {
-  // unique val
-  // KEY[0] = 0,
-  // KEY[1] = 1
-  registerUser
+	// unique val
+	// KEY[0] = 0,
+	// KEY[1] = 1
+	registerUser,
+	loginUser
 }
 
-export type Action = IRegisterUser;
+export type UserActions = RegUserAction;
+export type AuthActions = LoginAction;

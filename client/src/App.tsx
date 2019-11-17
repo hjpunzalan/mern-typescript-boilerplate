@@ -1,21 +1,21 @@
 import React, { Component } from "react";
-import { Route, Redirect, withRouter } from "react-router-dom";
+// import { Route, Redirect, withRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 interface Props {}
 interface State {}
 
 class App extends Component<Props, State> {
-  state = {};
+	state = {};
 
-  render() {
-    return (
-      <div>
-        <h1>Welcome to the app</h1>
-        <Navbar />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<h1>Welcome to the app</h1>
+				<Navbar />
+			</div>
+		);
+	}
 }
 
 export default App;
