@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Props {}
 interface State {}
@@ -10,7 +10,9 @@ class Navbar extends Component<Props, State> {
 	render() {
 		return (
 			<ul>
-				<li>Home</li>
+				<li>
+					<Link to="/">Home</Link>
+				</li>
 			</ul>
 		);
 	}
