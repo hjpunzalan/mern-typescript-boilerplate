@@ -1,16 +1,28 @@
 import React, { Component } from "react";
 import StatusAlert, { StatusAlertService } from "react-status-alert";
 import "react-status-alert/dist/status-alert.css";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { Location } from "history";
 
-interface Props {}
+interface Props extends RouteComponentProps<any> {
+	location: Location;
+}
 interface State {
 	alertId: string;
+	location: Location;
 }
 
 class Alerts extends Component<Props, State> {
 	state = {
-		alertId: ""
+		alertId: "",
+		location: this.props.location
 	};
+
+	componentDidUpdate(prevProps: Props) {
+		if (this.props.location !== prevProps.location) {
+			StatusAlertService.removeAlert(this.state.alertId);
+		}
+	}
 
 	showSuccessAlert = () => {
 		const alertId = StatusAlertService.showSuccess("Default success alert!");
@@ -33,4 +45,4 @@ class Alerts extends Component<Props, State> {
 	}
 }
 
-export default Alerts;
+export default withRouter(Alerts);
