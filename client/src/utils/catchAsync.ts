@@ -1,4 +1,3 @@
-import { Dispatch } from "redux";
 import { DispatchThunk, setAlert, AlertType } from "../actions";
 import { AxiosError } from "axios";
 

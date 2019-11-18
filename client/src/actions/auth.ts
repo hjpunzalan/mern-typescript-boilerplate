@@ -1,8 +1,9 @@
-import { ActionTypes } from "./types";
 import { Dispatch } from "redux";
 import axios from "axios";
+import { ActionTypes, DispatchThunk } from "./types";
 import { IUser } from "../actions";
 import catchAsync from "../utils/catchAsync";
+import { setAlert, AlertType } from "./alerts";
 
 export interface LoginAction {
 	type: ActionTypes.loginUser;
@@ -17,4 +18,11 @@ export const postLogin = (email: string, password: string) =>
 			type: ActionTypes.loginUser,
 			payload: res.data
 		});
+
+		(dispatch as DispatchThunk)(
+			setAlert(
+				`${res.data.firstName} successfully logged in`,
+				AlertType.success
+			)
+		);
 	});

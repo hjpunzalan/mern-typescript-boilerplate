@@ -11,26 +11,27 @@ interface Props extends RouteComponentProps<any>, StoreState {
 	location: Location;
 }
 interface State {
-	alertId: string;
+	alertIds: string[];
 	location: Location;
 }
 
 class Alerts extends Component<Props, State> {
 	state = {
-		alertId: "",
+		alertIds: [],
 		location: this.props.location
 	};
 
 	componentDidUpdate(prevProps: Props) {
 		// Remove alert everytime route changes
 		if (this.props.location !== prevProps.location) {
-			StatusAlertService.removeAlert(this.state.alertId);
+			for (const id of this.state.alertIds) StatusAlertService.removeAlert(id);
 		}
 
-		if (this.props.alert !== prevProps.alert) {
+		if (this.props.alerts !== prevProps.alerts) {
 			let alertId: string = "";
-			const { msg, alertType } = this.props.alert;
-			if (msg && alertType) {
+			const currentIds = this.state.alertIds;
+			this.props.alerts.forEach(alert => {
+				const { msg, alertType } = alert;
 				switch (alertType) {
 					case AlertType.success:
 						alertId = StatusAlertService.showSuccess(msg);
@@ -47,8 +48,9 @@ class Alerts extends Component<Props, State> {
 					default:
 						break;
 				}
-			}
-			this.setState({ alertId });
+			});
+
+			this.setState({ alertIds: [...currentIds, alertId] });
 		}
 	}
 
@@ -64,7 +66,7 @@ class Alerts extends Component<Props, State> {
 const mapStateToProps = (state: StoreState) => ({
 	auth: state.auth,
 	users: state.users,
-	alert: state.alert
+	alerts: state.alerts
 });
 
 export default connect(
