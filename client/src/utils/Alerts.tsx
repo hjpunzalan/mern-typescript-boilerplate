@@ -27,6 +27,7 @@ class Alerts extends Component<Props, State> {
 			for (const id of this.state.alertIds) StatusAlertService.removeAlert(id);
 		}
 
+		// Add new alert whenever alert is added to the store's state
 		if (this.props.alerts !== prevProps.alerts) {
 			let alertId: string = "";
 			const currentIds = this.state.alertIds;

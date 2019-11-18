@@ -1,11 +1,6 @@
-import { Dispatch } from "redux";
 import { SetAlertAction, ResetAlertAction } from "./alerts";
 import { RegUserAction } from "./users";
 import { LoginAction } from "./auth";
-
-// Normal Dispatch Action from redux require returning an action and not function
-// It requires a type property which is not needed with Thunk
-export type DispatchThunk = (fn: Function) => (dispatch: Dispatch) => void;
 
 export enum ActionTypes {
 	// unique val

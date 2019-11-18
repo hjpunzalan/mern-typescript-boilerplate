@@ -1,6 +1,5 @@
-import { Dispatch } from "redux";
 import axios from "axios";
-import { ActionTypes, DispatchThunk } from "./types";
+import { ActionTypes } from "./types";
 import { IUser } from "../actions";
 import catchAsync from "../utils/catchAsync";
 import { setAlert, AlertType } from "./alerts";
@@ -11,15 +10,18 @@ export interface LoginAction {
 }
 
 export const postLogin = (email: string, password: string) =>
-	catchAsync<Dispatch<LoginAction>>(async dispatch => {
-		const res = await axios.post<IUser>("/api/auth/login", { email, password });
+	catchAsync(async dispatch => {
+		const res = await axios.post<IUser>("/api/auth/login", {
+			email,
+			password
+		});
 
-		dispatch({
+		dispatch<LoginAction>({
 			type: ActionTypes.loginUser,
 			payload: res.data
 		});
 
-		(dispatch as DispatchThunk)(
+		dispatch(
 			setAlert(
 				`${res.data.firstName} successfully logged in`,
 				AlertType.success

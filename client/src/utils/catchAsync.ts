@@ -1,16 +1,22 @@
-import { DispatchThunk, setAlert, AlertType } from "../actions";
+import { setAlert, AlertType } from "../actions";
 import { AxiosError } from "axios";
+import { ThunkDispatch } from "redux-thunk";
+import { StoreState } from "../reducers";
+import { AnyAction } from "redux";
 
-const catchAsync = <DispatchAction>(
-	fn: (dispatch: DispatchAction) => Promise<void>
+// Normal Dispatch Action from redux require returning an action and not function
+// It requires a type property which is not needed with Thunk
+
+const catchAsync = (
+	fn: (dispatch: ThunkDispatch<StoreState, void, AnyAction>) => Promise<void>
 ) => {
-	return async (dispatch: DispatchThunk | DispatchAction) => {
-		await fn(dispatch as DispatchAction).catch((err: AxiosError) => {
+	return async (dispatch: ThunkDispatch<StoreState, void, AnyAction>) => {
+		await fn(dispatch).catch((err: AxiosError) => {
 			console.error(err);
 			if (err.response) {
 				const errors = err.response.data;
-				// The types handles when loading is still true
-				(dispatch as DispatchThunk)(setAlert(errors.message, AlertType.error));
+
+				dispatch(setAlert(errors.message, AlertType.error));
 			}
 		});
 	};
