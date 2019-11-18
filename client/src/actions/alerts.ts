@@ -9,8 +9,8 @@ export enum AlertType {
 }
 
 export type Alert = {
-	msg: string | null;
-	alertType: AlertType | null;
+	msg: string;
+	alertType: AlertType;
 };
 
 export interface ResetAlertAction {
