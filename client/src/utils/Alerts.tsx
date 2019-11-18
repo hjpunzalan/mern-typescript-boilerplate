@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import { StoreState } from "../reducers";
 import { setAlert, resetAlert, AlertType } from "../actions";
 
-interface Props extends RouteComponentProps<any>, StoreState {
+// RouteComponent Allow the use of withRouter
+interface Props extends RouteComponentProps, StoreState {
 	location: Location;
 }
 interface State {

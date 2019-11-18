@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { postLogin } from "../../actions";
+import { StoreState } from "../../reducers";
+import { Redirect } from "react-router";
 
-interface Props {
+interface Props extends StoreState {
 	postLogin: (email: string, password: string) => Promise<void>;
 }
 interface State {
@@ -31,7 +33,9 @@ class Login extends Component<Props, State> {
 	};
 
 	render() {
-		return (
+		return this.props.auth.isAuthenticated ? (
+			<Redirect to="/dashboard" />
+		) : (
 			<div>
 				<h1>Login page</h1>
 				<form onSubmit={this.handleSubmit}>
@@ -63,7 +67,11 @@ class Login extends Component<Props, State> {
 	}
 }
 
+const mapStateToProps = (state: StoreState) => ({
+	auth: state.auth
+});
+
 export default connect(
-	null,
+	mapStateToProps,
 	{ postLogin }
 )(Login);
