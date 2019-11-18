@@ -15,7 +15,7 @@ export interface RegUserAction {
 	payload: IUser;
 }
 
-export const registerUser = () => async (dispatch: Dispatch) => {
+export const registerUser = () => async (dispatch: Dispatch<RegUserAction>) => {
 	const res = await axios.get<IUser>("/api/users/api");
 	dispatch<RegUserAction>({
 		type: ActionTypes.registerUser,

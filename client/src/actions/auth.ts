@@ -9,11 +9,9 @@ export interface LoginAction {
 }
 
 export const postLogin = (email: string, password: string) => async (
-	dispatch: Dispatch
+	dispatch: Dispatch<LoginAction>
 ) => {
-	console.log("it works");
 	const res = await axios.post<IUser>("/api/auth/login", { email, password });
-	console.log(res);
 	dispatch<LoginAction>({
 		type: ActionTypes.loginUser,
 		payload: res.data
