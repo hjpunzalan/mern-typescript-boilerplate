@@ -1,4 +1,4 @@
-import { AlertAction, ResetAlertAction } from "./alerts";
+import { SetAlertAction, ResetAlertAction } from "./alerts";
 import { RegUserAction } from "./users";
 import { LoginAction } from "./auth";
 
@@ -15,4 +15,4 @@ export enum ActionTypes {
 
 export type UserActions = RegUserAction;
 export type AuthActions = LoginAction;
-export type AlertActions = AlertAction | ResetAlertAction;
+export type AlertActions = SetAlertAction | ResetAlertAction;
