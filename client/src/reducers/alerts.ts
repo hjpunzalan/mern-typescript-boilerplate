@@ -1,23 +1,17 @@
 import { ActionTypes, AlertActions, Alert } from "../actions";
 
-export interface AlertState {
-	alert: Alert[];
-}
-
-const initialState: AlertState = {
-	alert: []
+const initialState: Alert = {
+	msg: null,
+	alertType: null
 };
 
-export default (state = initialState, action: AlertActions) => {
+export const alertReducer = (state = initialState, action: AlertActions) => {
 	switch (action.type) {
 		case ActionTypes.alert:
-			return {
-				alert: [...state.alert, action.payload]
-			};
+			return action.payload;
+
 		case ActionTypes.resetAlert:
-			return {
-				alert: []
-			};
+			return initialState;
 		default:
 			return state;
 	}

@@ -1,14 +1,17 @@
 import { combineReducers } from "redux";
 import { authReducer, AuthState } from "./auth";
+import { alertReducer } from "./alerts";
 import { userReducer } from "./users";
-import { IUser } from "../actions";
+import { IUser, Alert } from "../actions";
 
 export interface StoreState {
 	auth: AuthState;
 	users: IUser[];
+	alert: Alert;
 }
 
 export const reducers = combineReducers<StoreState>({
 	auth: authReducer,
-	users: userReducer
+	users: userReducer,
+	alert: alertReducer
 });

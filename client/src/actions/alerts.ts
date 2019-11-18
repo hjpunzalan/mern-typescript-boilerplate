@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { ActionTypes } from "./types";
+
 export enum AlertType {
 	success = "success",
 	error = "error",
@@ -8,8 +9,8 @@ export enum AlertType {
 }
 
 export type Alert = {
-	msg: string;
-	alertType: AlertType;
+	msg: string | null;
+	alertType: AlertType | null;
 };
 
 export interface ResetAlertAction {
@@ -28,5 +29,11 @@ export const setAlert = (msg: string, alertType: AlertType) => (
 	dispatch<SetAlertAction>({
 		type: ActionTypes.alert,
 		payload: { msg, alertType }
+	});
+};
+
+export const resetAlert = () => (dispatch: Dispatch) => {
+	dispatch({
+		type: ActionTypes.resetAlert
 	});
 };
