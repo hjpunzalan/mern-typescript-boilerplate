@@ -6,8 +6,8 @@ interface Props {
 	postLogin: (email: string, password: string) => Promise<void>;
 }
 interface State {
-	email: string | null;
-	password: string | null;
+	email: string;
+	password: string;
 }
 
 class Login extends Component<Props, State> {
@@ -26,7 +26,7 @@ class Login extends Component<Props, State> {
 	handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { email, password } = this.state;
-		postLogin(email, password);
+		this.props.postLogin(email, password);
 		this.setState({ email: "", password: "" });
 	};
 

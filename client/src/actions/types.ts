@@ -5,8 +5,9 @@ export enum ActionTypes {
 	// unique val
 	// KEY[0] = 0,
 	// KEY[1] = 1
-	registerUser,
-	loginUser
+	// Added initializer for redux devtools
+	registerUser = "REGISTER_USER",
+	loginUser = "LOGIN_USER"
 }
 
 export type UserActions = RegUserAction;
