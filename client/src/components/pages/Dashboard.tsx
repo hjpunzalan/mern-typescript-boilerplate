@@ -12,7 +12,10 @@ class Dashboard extends Component<Props, State> {
 		const { currentUser } = this.props.auth;
 		return (
 			<div>
-				<h3>Hi {currentUser && currentUser.firstName}!</h3>
+				<h3>
+					Hi {currentUser && currentUser.firstName}{" "}
+					{currentUser && currentUser.lastName}!
+				</h3>
 			</div>
 		);
 	}

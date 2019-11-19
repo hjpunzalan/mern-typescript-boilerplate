@@ -6,6 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home";
 import Login from "../auth/Login";
 import Dashboard from "../pages/Dashboard";
+import Register from "../auth/Register";
 
 interface Props extends StoreState {}
 
@@ -17,6 +18,7 @@ class Routes extends Component<Props> {
 			<Switch>
 				<Route exact path="/" component={Home} />
 				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={Register} />
 				<PrivateRoute
 					isAuthenticated={this.props.auth.isAuthenticated}
 					exact

@@ -25,12 +25,12 @@ class Navbar extends Component<Props> {
 				</li>
 				{!isAuthenticated
 					? publicRoute.map(route => (
-							<li>
+							<li key={route.name}>
 								<Link to={route.path}>{route.name}</Link>
 							</li>
 					  ))
 					: privateRoute.map(route => (
-							<li>
+							<li key={route.name}>
 								<Link to={route.path}>{route.name}</Link>
 							</li>
 					  ))}
