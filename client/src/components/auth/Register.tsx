@@ -36,7 +36,7 @@ class Register extends Component<Props, IRegisterState> {
 		this.props.registerUser(this.state).then(() => {
 			// If register fails invalid
 			// clear password
-			this.setState({ password: "" });
+			if (!this.props.auth.isAuthenticated) this.setState({ password: "" });
 		});
 	};
 
