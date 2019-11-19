@@ -1,6 +1,5 @@
 import { SetAlertAction, ResetAlertAction } from "./alerts";
-import { RegUserAction } from "./users";
-import { LoginAction, LogoutAction } from "./auth";
+import { LoginAction, LogoutAction, RegUserAction } from "./auth";
 
 export enum ActionTypes {
 	// unique val
@@ -14,6 +13,6 @@ export enum ActionTypes {
 	logoutUser = "LOGOUT_USER"
 }
 
-export type UserActions = RegUserAction;
-export type AuthActions = LoginAction | LogoutAction;
+// export type UserActions = ;
+export type AuthActions = LoginAction | LogoutAction | RegUserAction;
 export type AlertActions = SetAlertAction | ResetAlertAction;
