@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Location } from "history";
 import { connect } from "react-redux";
 import { StoreState } from "../reducers";
-import { setAlert, resetAlert, AlertType } from "../actions";
+import { setAlert, resetAlert } from "../actions";
 
 // RouteComponent Allow the use of withRouter
 interface Props extends RouteComponentProps, StoreState {
@@ -30,29 +30,13 @@ class Alerts extends Component<Props, State> {
 
 		// Add new alert whenever alert is added to the store's state
 		if (this.props.alerts !== prevProps.alerts) {
-			let alertId: string = "";
 			const currentIds = this.state.alertIds;
 			this.props.alerts.forEach(alert => {
+				let alertId: string = "";
 				const { msg, alertType } = alert;
-				switch (alertType) {
-					case AlertType.success:
-						alertId = StatusAlertService.showSuccess(msg);
-						break;
-					case AlertType.error:
-						alertId = StatusAlertService.showError(msg);
-						break;
-					case AlertType.info:
-						alertId = StatusAlertService.showInfo(msg);
-						break;
-					case AlertType.warning:
-						alertId = StatusAlertService.showWarning(msg);
-						break;
-					default:
-						break;
-				}
+				alertId = StatusAlertService.showAlert(msg, alertType);
+				this.setState({ alertIds: [...currentIds, alertId] });
 			});
-
-			this.setState({ alertIds: [...currentIds, alertId] });
 		}
 	}
 

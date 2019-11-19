@@ -9,6 +9,8 @@ import Dashboard from "../pages/Dashboard";
 
 interface Props extends StoreState {}
 
+export enum NavRoutes {}
+
 class Routes extends Component<Props> {
 	render() {
 		return (

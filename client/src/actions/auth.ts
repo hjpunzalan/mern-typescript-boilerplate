@@ -8,6 +8,9 @@ export interface LoginAction {
 	type: ActionTypes.loginUser;
 	payload: IUser;
 }
+export interface LogoutAction {
+	type: ActionTypes.logoutUser;
+}
 
 export const postLogin = (email: string, password: string) =>
 	catchAsync(async dispatch => {
@@ -27,4 +30,10 @@ export const postLogin = (email: string, password: string) =>
 				AlertType.success
 			)
 		);
+	});
+
+export const getLogout = () =>
+	catchAsync(async dispatch => {
+		await axios.get("/api/auth/logout");
+		dispatch<LogoutAction>({ type: ActionTypes.logoutUser });
 	});
