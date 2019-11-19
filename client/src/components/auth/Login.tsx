@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { postLogin } from "../../actions";
 import { StoreState } from "../../reducers";
 import { Redirect } from "react-router";
+import Spinner from "../utils/Spinner/Spinner";
 
 interface Props extends StoreState {
 	postLogin: (email: string, password: string) => Promise<void>;
@@ -10,12 +11,14 @@ interface Props extends StoreState {
 interface State {
 	email: string;
 	password: string;
+	loading: boolean;
 }
 
 class Login extends Component<Props, State> {
 	state = {
 		email: "",
-		password: ""
+		password: "",
+		loading: false
 	};
 
 	handleChange = (e: { target: HTMLInputElement }) => {
@@ -28,8 +31,15 @@ class Login extends Component<Props, State> {
 	handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { email, password } = this.state;
-		this.props.postLogin(email, password);
-		this.setState({ email: "", password: "" });
+		// Set loading to true which adds spinner
+		this.setState({ loading: true });
+
+		// Login user
+		this.props.postLogin(email, password).then(() => {
+			// Refresh form if authentication fails
+			if (!this.props.auth.isAuthenticated)
+				this.setState({ email: "", password: "", loading: false });
+		});
 	};
 
 	render() {
@@ -38,30 +48,34 @@ class Login extends Component<Props, State> {
 		) : (
 			<div>
 				<h1>Login page</h1>
-				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="email">
-						<b>Email</b>
-					</label>
-					<input
-						type="email"
-						name="email"
-						value={this.state.email}
-						onChange={this.handleChange}
-						required
-					/>
-					<label htmlFor="password">
-						<b>Password</b>
-					</label>
-					<input
-						type="password"
-						name="password"
-						value={this.state.password}
-						onChange={this.handleChange}
-						minLength={6}
-						required
-					/>
-					<button>Login</button>
-				</form>
+				{this.state.loading ? (
+					<Spinner />
+				) : (
+					<form onSubmit={this.handleSubmit}>
+						<label htmlFor="email">
+							<b>Email</b>
+						</label>
+						<input
+							type="email"
+							name="email"
+							value={this.state.email}
+							onChange={this.handleChange}
+							required
+						/>
+						<label htmlFor="password">
+							<b>Password</b>
+						</label>
+						<input
+							type="password"
+							name="password"
+							value={this.state.password}
+							onChange={this.handleChange}
+							minLength={6}
+							required
+						/>
+						<button>Login</button>
+					</form>
+				)}
 			</div>
 		);
 	}

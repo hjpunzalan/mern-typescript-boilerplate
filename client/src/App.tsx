@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Navbar from "./components/layout/Navbar";
 import Routes from "./components/routing/Routes";
 import Alerts from "./utils/Alerts";
+import Spinner from "./components/utils/Spinner/Spinner";
 
 interface Props {}
 interface State {}
