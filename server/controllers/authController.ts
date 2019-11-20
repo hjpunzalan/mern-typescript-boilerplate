@@ -17,7 +17,11 @@ class UserController {
 	@use(bodyValidator("email", "password"))
 	@catchAsync
 	async login(req: Request, res: Response, next: NextFunction) {
-		const { email, password } = req.body;
+		interface ReqBody {
+			email: string;
+			password: string;
+		}
+		const { email, password }: ReqBody = req.body;
 
 		// Password by default is not selected
 		let user = await Users.findOne({ email }).select("+password");
@@ -32,7 +36,9 @@ class UserController {
 			);
 			// Only search user if user exist
 			if (activateUser.n)
-				user = await Users.findOne({ email }).select("+password");
+				user = await Users.findOne({
+					email
+				}).select("+password");
 		}
 		// Verify user exist and password is correct
 		if (
@@ -47,9 +53,10 @@ class UserController {
 		user.password = undefined;
 
 		// Add to session
+		// any type need to fix
 		if (req.session) {
 			req.session.loggedIn = true;
-			req.session.userId = user;
+			req.session.userId = user.id;
 			req.session.date = Date.now();
 		}
 
@@ -67,10 +74,19 @@ class UserController {
 	}
 
 	@post("/forgotpassword")
+	@use(bodyValidator("email", "url"))
 	@catchAsync
 	async forgotPassword(req: Request, res: Response, next: NextFunction) {
+		interface ReqBody {
+			email: string;
+			url: string;
+		}
+
+		const { email, url }: ReqBody = req.body;
 		//  Get user based on POSTed email from user input
-		const user = await Users.findOne({ email: req.body.email });
+		const user = await Users.findOne({
+			email
+		});
 		if (!user) {
 			return next(
 				new AppError("There is no user with this email address", 404)
@@ -79,12 +95,14 @@ class UserController {
 		// Generate the random reset token
 		const resetToken = user.createPasswordResetToken();
 		//   Password reset token added to user document and should be saved
-		await user.save({ validateBeforeSave: false }); // modified the user document ... disabled validators before save
+		await user.save({
+			validateBeforeSave: false
+		}); // modified the user document ... disabled validators before save
 
 		// Not enough to catch error in global error handling and use catchAsync
 		// Need to also delete/undefined the reset password token and expiration
 		try {
-			const resetURL = req.body.url + "/reset/" + resetToken;
+			const resetURL = url + "/reset/" + resetToken;
 
 			await new Email(user).sendPasswordReset(resetToken, resetURL);
 
@@ -95,7 +113,9 @@ class UserController {
 		} catch (error) {
 			user.passwordResetToken = undefined;
 			user.passwordResetExpires = undefined;
-			await user.save({ validateBeforeSave: false }); // dont need to revalidate
+			await user.save({
+				validateBeforeSave: false
+			}); // dont need to revalidate
 			console.error(error);
 			return next(
 				new AppError(
@@ -110,6 +130,12 @@ class UserController {
 	@use(bodyValidator("password"))
 	@catchAsync
 	async resetPassword(req: Request, res: Response, next: NextFunction) {
+		interface ReqBody {
+			password: string;
+		}
+
+		const { password }: ReqBody = req.body;
+
 		// 1) Get user based on the token
 		// sha256 is the name of the algorithm
 		// Hash the token from email
@@ -134,7 +160,7 @@ class UserController {
 		}
 
 		// modify data
-		user.password = req.body.password;
+		user.password = password;
 		user.passwordResetToken = undefined;
 		user.passwordResetExpires = undefined;
 		await user.save(); // use save to run validators again because find and update wont
@@ -151,10 +177,14 @@ class UserController {
 	}
 
 	@post("/changepassword")
-	@use(requireAuth, bodyValidator("password", "newPassword"))
+	@use(requireAuth, bodyValidator("password", "newPassword", "confirmPassword"))
 	async changePassword(req: Request, res: Response, next: NextFunction) {
-		console.log(req.body);
-		const { password, newPassword } = req.body;
+		interface ReqBody {
+			password: string;
+			newPassword: string;
+			confirmPassword: string;
+		}
+		const { password, newPassword, confirmPassword }: ReqBody = req.body;
 
 		// 1) Get user from collection
 		// forces select to be true and find if user exist
