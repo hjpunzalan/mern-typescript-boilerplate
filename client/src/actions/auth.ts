@@ -18,6 +18,11 @@ export interface RegUserAction {
 	payload: IUser;
 }
 
+export interface ChangePassAction {
+	type: ActionTypes.changePassword;
+	payload: IUser;
+}
+
 export const postLogin = (email: string, password: string) =>
 	catchAsync(async dispatch => {
 		const res = await axios.post<IUser>("/api/auth/login", {
@@ -57,4 +62,18 @@ export const registerUser = (form: IRegisterState) =>
 				AlertType.success
 			)
 		);
+	});
+
+export const changePasssword = (password: string, newPassword: string) =>
+	catchAsync(async dispatch => {
+		const res = await axios.post("/api/changepassword", {
+			password,
+			newPassword
+		});
+		dispatch<ChangePassAction>({
+			type: ActionTypes.changePassword,
+			payload: res.data
+		});
+
+		dispatch(setAlert("Password successfully changed!", AlertType.success));
 	});
