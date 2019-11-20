@@ -28,12 +28,7 @@ class UserController {
 
 		// If user's account has been deactivated by user, reactivate it.
 		if (!user) {
-			const activateUser = await Users.updateOne(
-				{ email },
-				{
-					active: true
-				}
-			);
+			const activateUser = await Users.updateOne({ email }, { active: true });
 			// Only search user if user exist
 			if (activateUser.n)
 				user = await Users.findOne({
@@ -177,14 +172,17 @@ class UserController {
 	}
 
 	@post("/changepassword")
-	@use(requireAuth, bodyValidator("password", "newPassword", "confirmPassword"))
+	@use(
+		requireAuth,
+		bodyValidator("currentPassword", "newPassword", "confirmPassword")
+	)
 	async changePassword(req: Request, res: Response, next: NextFunction) {
 		interface ReqBody {
-			password: string;
+			currentPassword: string;
 			newPassword: string;
 			confirmPassword: string;
 		}
-		const { password, newPassword, confirmPassword }: ReqBody = req.body;
+		const { currentPassword, newPassword, confirmPassword }: ReqBody = req.body;
 
 		// Check if newPassword is same as confirmPassword
 		if (newPassword != confirmPassword)
@@ -200,7 +198,7 @@ class UserController {
 			if (
 				user &&
 				user.password &&
-				!(await user.checkPassword(password, user.password))
+				!(await user.checkPassword(currentPassword, user.password))
 			) {
 				return next(
 					new AppError("Please enter the correct current password.", 401)
