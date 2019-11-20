@@ -186,6 +186,10 @@ class UserController {
 		}
 		const { password, newPassword, confirmPassword }: ReqBody = req.body;
 
+		// Check if newPassword is same as confirmPassword
+		if (newPassword != confirmPassword)
+			return next(new AppError("Please confirm password correctly.", 400));
+
 		// 1) Get user from collection
 		// forces select to be true and find if user exist
 		// req.user was from requireAuth middleware session to make sure user is logged in
