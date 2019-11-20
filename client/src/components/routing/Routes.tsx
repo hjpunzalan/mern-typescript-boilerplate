@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Login from "../auth/Login";
 import Dashboard from "../pages/Dashboard";
 import Register from "../auth/Register";
+import ChangePassword from "../auth/ChangePassword";
 
 interface Props extends StoreState {}
 
@@ -24,6 +25,12 @@ class Routes extends Component<Props> {
 					exact
 					path="/dashboard"
 					component={Dashboard}
+				/>
+				<PrivateRoute
+					isAuthenticated={this.props.auth.isAuthenticated}
+					exact
+					path="/changePassword"
+					component={ChangePassword}
 				/>
 			</Switch>
 		);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { StoreState } from "../../reducers";
+import { Link } from "react-router-dom";
 
 interface Props extends StoreState {}
 interface State {}
@@ -16,6 +17,11 @@ class Dashboard extends Component<Props, State> {
 					Hi {currentUser && currentUser.firstName}{" "}
 					{currentUser && currentUser.lastName}!
 				</h3>
+				<ul>
+					<li>
+						<Link to="/changepassword">Change Password</Link>
+					</li>
+				</ul>
 			</div>
 		);
 	}
