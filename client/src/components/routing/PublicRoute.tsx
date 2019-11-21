@@ -1,29 +1,26 @@
-import React from "react";
-import { Redirect, Route, RouteProps } from "react-router";
-import Axios from "axios";
+import React, { Component } from "react";
+import { Route, RouteProps } from "react-router-dom";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import { ActionTypes } from "../../actions";
+import { Dispatch } from "redux";
+import Axios from "axios";
 
 interface Props extends RouteProps {
-	isAuthenticated: boolean;
 	sessionExpired: () => { type: ActionTypes };
 }
 
-class PrivateRoute extends Route<Props> {
-	componentDidUpdate() {
+class PublicRoute extends Component<Props> {
+	componentDidMount() {
 		// Log user out if session expires
 		Axios.get<boolean>("/api/auth/isloggedin").then(res => {
+			console.log(res.data);
 			if (res.data === false) this.props.sessionExpired();
 			else return;
 		});
 	}
-	public render() {
-		return !this.props.isAuthenticated ? (
-			<Redirect to="/login" />
-		) : (
-			<Route {...this.props} />
-		);
+
+	render() {
+		return <Route {...this.props} />;
 	}
 }
 
@@ -34,4 +31,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect(
 	null,
 	mapDispatchToProps
-)(PrivateRoute);
+)(PublicRoute);

@@ -12,7 +12,15 @@ export const authRoute = Router();
 // commented out password in user model
 @controller("/auth", authRoute)
 class UserController {
-	// work to do: reactivate when logging in
+	@get("/isloggedin")
+	isLoggedIn(req: Request, res: Response) {
+		if ((req.session && !req.session.loggedIn) || !req.session) {
+			res.status(200).json(false);
+		} else {
+			res.status(200).json(true);
+		}
+	}
+
 	@post("/login")
 	@use(bodyValidator("email", "password"))
 	@catchAsync
