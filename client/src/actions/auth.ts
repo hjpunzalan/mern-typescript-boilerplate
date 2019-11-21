@@ -1,4 +1,4 @@
-import { StateChangePass } from "./../components/auth/ChangePassword";
+import { ChangePassState } from "./../components/auth/ChangePassword";
 import axios from "axios";
 import { ActionTypes } from "./types";
 import { IUser } from "../actions";
@@ -65,7 +65,7 @@ export const registerUser = (form: IRegisterState) =>
 		);
 	});
 
-export const changePassword = (form: StateChangePass) =>
+export const changePassword = (form: ChangePassState) =>
 	catchAsync(async dispatch => {
 		const res = await axios.post("/api/auth/changepassword", form);
 		dispatch<ChangePassAction>({

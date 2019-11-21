@@ -5,16 +5,16 @@ import Spinner from "../utils/Spinner/Spinner";
 import { StoreState } from "../../reducers";
 
 interface Props extends StoreState {
-	changePassword: (form: StateChangePass) => Promise<void>;
+	changePassword: (form: ChangePassState) => Promise<void>;
 }
-export interface StateChangePass {
+export interface ChangePassState {
 	currentPassword: string;
 	newPassword: string;
 	confirmPassword: string;
 	loading?: boolean;
 }
 
-class ChangePassword extends Component<Props, StateChangePass> {
+class ChangePassword extends Component<Props, ChangePassState> {
 	state = {
 		currentPassword: "",
 		newPassword: "",
