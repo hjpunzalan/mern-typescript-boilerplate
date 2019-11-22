@@ -12,28 +12,45 @@ import ChangePassword from "../auth/ChangePassword";
 
 interface Props extends StoreState {}
 
-export enum NavRoutes {}
+export const pubRoutesArr = [
+	{ name: "Home", path: "/", component: Home, nav: true },
+	{ name: "Login", path: "/login", component: Login },
+	{ name: "Register", path: "/register", component: Register }
+];
+
+export const privRoutesArr = [
+	{ name: "Dashboard", path: "/dashboard", component: Dashboard },
+	{
+		name: "Change Password",
+		path: "/changepassword",
+		component: ChangePassword,
+		nav: false
+	}
+];
 
 class Routes extends Component<Props> {
 	render() {
 		return (
 			<Switch>
-				<PublicRoute exact path="/" component={Home} />
-				<PublicRoute exact path="/login" component={Login} />
-				<PublicRoute exact path="/register" component={Register} />
-				<PrivateRoute
-					isAuthenticated={this.props.auth.isAuthenticated}
-					exact
-					path="/dashboard"
-					component={Dashboard}
-				/>
+				{pubRoutesArr.map(route => (
+					<PublicRoute
+						key={route.name}
+						isAuthenticated={this.props.auth.isAuthenticated}
+						exact
+						path={route.path}
+						component={route.component}
+					/>
+				))}
 
-				<PrivateRoute
-					isAuthenticated={this.props.auth.isAuthenticated}
-					exact
-					path="/changepassword"
-					component={ChangePassword}
-				/>
+				{privRoutesArr.map(route => (
+					<PrivateRoute
+						key={route.name}
+						isAuthenticated={this.props.auth.isAuthenticated}
+						exact
+						path={route.path}
+						component={route.component}
+					/>
+				))}
 			</Switch>
 		);
 	}

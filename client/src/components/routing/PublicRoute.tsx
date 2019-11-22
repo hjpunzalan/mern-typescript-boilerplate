@@ -7,16 +7,17 @@ import Axios from "axios";
 
 interface Props extends RouteProps {
 	sessionExpired: () => { type: ActionTypes };
+	isAuthenticated: boolean;
 }
 
 class PublicRoute extends Component<Props> {
-	componentDidMount() {
+	componentDidUpdate() {
 		// Log user out if session expires
-		Axios.get<boolean>("/api/auth/isloggedin").then(res => {
-			console.log(res.data);
-			if (res.data === false) this.props.sessionExpired();
-			else return;
-		});
+		if (this.props.isAuthenticated)
+			Axios.get<boolean>("/api/auth/isloggedin").then(res => {
+				if (res.data === false) this.props.sessionExpired();
+				else return;
+			});
 	}
 
 	render() {

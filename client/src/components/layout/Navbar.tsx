@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { StoreState } from "../../reducers";
 import { getLogout } from "../../actions";
+import { privRoutesArr, pubRoutesArr } from "../routing/Routes";
 
 interface Props extends StoreState {
 	getLogout: () => Promise<void>;
@@ -10,19 +11,12 @@ interface Props extends StoreState {
 
 class Navbar extends Component<Props> {
 	render() {
-		const publicRoute = [
-			{ path: "/login", name: "Login" },
-			{ path: "/register", name: "Register" }
-		];
-
-		const privateRoute = [{ path: "/dashboard", name: "Dashboard" }];
+		const publicRoute = pubRoutesArr.filter(route => route.nav !== false);
+		const privateRoute = privRoutesArr.filter(route => route.nav !== false);
 
 		const { isAuthenticated } = this.props.auth;
 		return (
 			<ul>
-				<li>
-					<Link to="/">Home</Link>
-				</li>
 				{!isAuthenticated
 					? publicRoute.map(route => (
 							<li key={route.name}>
