@@ -19,8 +19,18 @@ const catchAsync = (
 				// Log out user if no session exist --- 403  Forbidden
 				if (err.response.status === 401 || err.response.status === 403)
 					dispatch({ type: ActionTypes.logoutUser });
-				const errors = err.response.data;
 
+				// If server down
+				if (err.response.status === 500) {
+					return dispatch(
+						setAlert(
+							"Unfortunately there's a problem in our end...",
+							AlertType.error
+						)
+					);
+				}
+
+				const errors = err.response.data;
 				dispatch(setAlert(errors.message, AlertType.error));
 			}
 		});
