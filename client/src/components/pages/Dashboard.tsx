@@ -21,6 +21,9 @@ class Dashboard extends Component<Props, State> {
 					<li>
 						<Link to="/changepassword">Change Password</Link>
 					</li>
+					<li>
+						<Link to="/updateme">Update user details</Link>
+					</li>
 				</ul>
 			</div>
 		);

@@ -72,15 +72,12 @@ class UpdateMe extends Component<Props, IUpdateMeState> {
 						onChange={this.handleChange}
 						required
 					/>
-					<label htmlFor="password">
-						<b>Password</b>
-					</label>
 
 					<div className="Form__btns">
 						<button className="btn" onClick={this.handleCancel}>
 							Clear
 						</button>
-						<input type="submit" className="btn btn__submit" value="Register" />
+						<input type="submit" className="btn btn__submit" value="Update" />
 					</div>
 				</form>
 			</div>

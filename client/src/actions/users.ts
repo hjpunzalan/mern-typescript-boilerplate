@@ -1,3 +1,4 @@
+import { AlertType, setAlert } from "./alerts";
 import { IUpdateMeState } from "./../components/pages/UpdateMe";
 import { ActionTypes } from "./types";
 import axios from "axios";
@@ -28,4 +29,6 @@ export const updateUser = (form: IUpdateMeState) =>
 			type: ActionTypes.updateUser,
 			payload: res.data
 		});
+
+		dispatch(setAlert("User successfully updated!", AlertType.success));
 	});
