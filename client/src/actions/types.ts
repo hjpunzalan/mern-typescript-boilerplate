@@ -1,3 +1,4 @@
+import { UpdateUserAction } from "./users";
 import { SetAlertAction, ResetAlertAction } from "./alerts";
 import {
 	LoginAction,
@@ -16,7 +17,8 @@ export enum ActionTypes {
 	registerUser = "REGISTER_USER",
 	loginUser = "LOGIN_USER",
 	logoutUser = "LOGOUT_USER",
-	changePassword = "CHANGE_PASSWORD"
+	changePassword = "CHANGE_PASSWORD",
+	updateUser = "UPDATE_USER"
 }
 
 // export type UserActions = ;
@@ -24,5 +26,6 @@ export type AuthActions =
 	| LoginAction
 	| LogoutAction
 	| RegUserAction
-	| ChangePassAction;
+	| ChangePassAction
+	| UpdateUserAction;
 export type AlertActions = SetAlertAction | ResetAlertAction;

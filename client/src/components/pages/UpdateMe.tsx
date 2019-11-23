@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { StoreState } from "../../reducers";
-import { IUser } from "../../actions";
+import { IUser, updateUser } from "../../actions";
 
-interface Props extends StoreState {}
-interface UpdateMeState extends IUser {}
+interface Props extends StoreState {
+	updateUser: (form: IUpdateMeState) => Promise<void>;
+}
+export interface IUpdateMeState extends IUser {}
 
-class UpdateMe extends Component<Props, UpdateMeState> {
+class UpdateMe extends Component<Props, IUpdateMeState> {
 	state = {
 		firstName: this.props.auth.currentUser
 			? this.props.auth.currentUser.firstName

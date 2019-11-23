@@ -22,6 +22,7 @@ export const authReducer = (state = initialState, action: AuthActions) => {
 				currentUser: null,
 				isAuthenticated: false
 			};
+		case ActionTypes.updateUser:
 		case ActionTypes.changePassword:
 			return {
 				...state,

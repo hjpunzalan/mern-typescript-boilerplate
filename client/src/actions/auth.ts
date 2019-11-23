@@ -67,7 +67,7 @@ export const registerUser = (form: IRegisterState) =>
 
 export const changePassword = (form: ChangePassState) =>
 	catchAsync(async dispatch => {
-		const res = await axios.post("/api/auth/changepassword", form);
+		const res = await axios.post<IUser>("/api/auth/changepassword", form);
 		dispatch<ChangePassAction>({
 			type: ActionTypes.changePassword,
 			payload: res.data
