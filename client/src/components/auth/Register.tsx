@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions";
+import { registerUser, IUser } from "../../actions";
 import { Redirect } from "react-router";
 import { StoreState } from "../../reducers";
 
@@ -8,12 +8,7 @@ interface Props extends StoreState {
 	registerUser: (form: IRegisterState) => Promise<void>;
 }
 
-export interface IRegisterState {
-	firstName: string;
-	lastName: string;
-	email: string;
-	password: string;
-}
+export interface IRegisterState extends IUser {}
 
 class Register extends Component<Props, IRegisterState> {
 	state = {
