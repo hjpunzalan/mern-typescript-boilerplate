@@ -34,6 +34,7 @@ class Alerts extends Component<Props, State> {
 			this.props.alerts.forEach(alert => {
 				let alertId: string = "";
 				const { msg, alertType } = alert;
+				// Add custom options such as background color for each alert type
 				alertId = StatusAlertService.showAlert(msg, alertType);
 				this.setState({ alertIds: [...currentIds, alertId] });
 			});

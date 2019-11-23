@@ -1,0 +1,96 @@
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { StoreState } from "../../reducers";
+import { IUser } from "../../actions";
+
+interface Props extends StoreState {}
+interface UpdateMeState extends IUser {}
+
+class UpdateMe extends Component<Props, UpdateMeState> {
+	state = {
+		firstName: this.props.auth.currentUser
+			? this.props.auth.currentUser.firstName
+			: "",
+		lastName: this.props.auth.currentUser
+			? this.props.auth.currentUser.lastName
+			: "",
+		email: this.props.auth.currentUser ? this.props.auth.currentUser.email : ""
+	};
+
+	handleChange = (e: { target: HTMLInputElement }) => {
+		this.setState({ ...this.state, [e.target.name]: e.target.value });
+	};
+
+	handleCancel = () => {
+		this.setState({ firstName: "", lastName: "", email: "" });
+	};
+
+	handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		this.props.updateUser(this.state);
+	};
+
+	render() {
+		const { firstName, lastName, email } = this.state;
+		return (
+			<div>
+				<h1>Register a User</h1>
+				<hr />
+				<form onSubmit={this.handleSubmit}>
+					<label htmlFor="firstName">
+						<b>First Name</b>
+					</label>
+					<input
+						type="text"
+						placeholder="Enter first name"
+						name="firstName"
+						value={firstName}
+						onChange={this.handleChange}
+						required
+					/>
+					<label htmlFor="lastName">
+						<b>Last Name</b>
+					</label>
+					<input
+						type="text"
+						placeholder="Enter last name"
+						name="lastName"
+						value={lastName}
+						onChange={this.handleChange}
+						required
+					/>
+					<label htmlFor="email">
+						<b>Email</b>
+					</label>
+					<input
+						type="email"
+						placeholder="Enter Email"
+						name="email"
+						value={email}
+						onChange={this.handleChange}
+						required
+					/>
+					<label htmlFor="password">
+						<b>Password</b>
+					</label>
+
+					<div className="Form__btns">
+						<button className="btn" onClick={this.handleCancel}>
+							Clear
+						</button>
+						<input type="submit" className="btn btn__submit" value="Register" />
+					</div>
+				</form>
+			</div>
+		);
+	}
+}
+
+const mapStateToProps = (state: StoreState) => ({
+	auth: state.auth
+});
+
+export default connect(
+	mapStateToProps,
+	{ updateUser }
+)(UpdateMe);

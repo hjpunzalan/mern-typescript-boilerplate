@@ -9,6 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Register from "../auth/Register";
 import PublicRoute from "./PublicRoute";
 import ChangePassword from "../auth/ChangePassword";
+import UpdateMe from "../pages/UpdateMe";
 
 interface Props extends StoreState {}
 
@@ -24,6 +25,12 @@ export const privRoutesArr = [
 		name: "Change Password",
 		path: "/changepassword",
 		component: ChangePassword,
+		nav: false
+	},
+	{
+		name: "Update user details",
+		path: "/updateme",
+		component: UpdateMe,
 		nav: false
 	}
 ];
