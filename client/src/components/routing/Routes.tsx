@@ -11,6 +11,7 @@ import PublicRoute from "./PublicRoute";
 import ChangePassword from "../auth/ChangePassword";
 import UpdateMe from "../pages/UpdateMe";
 import ForgotPassword from "../auth/ForgotPassword";
+import ResetPassword from "../auth/ResetPassword";
 
 interface Props extends StoreState {}
 
@@ -22,6 +23,12 @@ export const pubRoutesArr = [
 		name: "Forgot Password",
 		path: "/forgotpassword",
 		component: ForgotPassword,
+		nav: false
+	},
+	{
+		name: "Reset Password",
+		path: "/forgotpassword/reset/:resetToken",
+		component: ResetPassword,
 		nav: false
 	}
 ];

@@ -4,7 +4,7 @@ import { postForgotPassword } from "../../actions";
 import Spinner from "../utils/Spinner/Spinner";
 
 interface Props {
-	postForgotPassword: (email: IForgotPassState) => Promise<void>;
+	postForgotPassword: (email: IForgotPassState, url: string) => Promise<void>;
 }
 export interface IForgotPassState {
 	loading?: boolean;
@@ -29,10 +29,12 @@ class ForgotPassword extends Component<Props, IForgotPassState> {
 		// Set loading to true which adds spinner
 		this.setState({ loading: true });
 		// Login user
-		this.props.postForgotPassword({ email: this.state.email }).then(() => {
-			// Refresh form
-			this.setState({ email: "", loading: false });
-		});
+		this.props
+			.postForgotPassword({ email: this.state.email }, document.location.href)
+			.then(() => {
+				// Refresh form
+				this.setState({ email: "", loading: false });
+			});
 	};
 
 	render() {
