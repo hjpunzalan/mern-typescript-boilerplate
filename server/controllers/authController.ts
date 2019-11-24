@@ -130,14 +130,19 @@ class UserController {
 	}
 
 	@patch("/resetpassword/:token")
-	@use(bodyValidator("password"))
+	@use(bodyValidator("newPassword", "confirmPassword"))
 	@catchAsync
 	async resetPassword(req: Request, res: Response, next: NextFunction) {
 		interface ReqBody {
-			password: string;
+			newPassword: string;
+			confirmPassword: string;
 		}
 
-		const { password }: ReqBody = req.body;
+		const { newPassword, confirmPassword }: ReqBody = req.body;
+
+		// Check if newPassword is same as confirmPassword
+		if (newPassword != confirmPassword)
+			return next(new AppError("Please confirm password correctly.", 400));
 
 		// 1) Get user based on the token
 		// sha256 is the name of the algorithm
@@ -163,7 +168,7 @@ class UserController {
 		}
 
 		// modify data
-		user.password = password;
+		user.password = newPassword;
 		user.passwordResetToken = undefined;
 		user.passwordResetExpires = undefined;
 		await user.save(); // use save to run validators again because find and update wont
