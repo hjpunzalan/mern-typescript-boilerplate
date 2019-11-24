@@ -1,3 +1,4 @@
+import { IResetPassState } from "./../components/auth/ResetPassword";
 import { IForgotPassState } from "./../components/auth/ForgotPassword";
 import { ChangePassState } from "./../components/auth/ChangePassword";
 import axios from "axios";
@@ -22,6 +23,11 @@ export interface RegUserAction {
 
 export interface ChangePassAction {
 	type: ActionTypes.changePassword;
+	payload: IUser;
+}
+
+export interface ResetPassAction {
+	type: ActionTypes.resetPassword;
 	payload: IUser;
 }
 
@@ -77,10 +83,23 @@ export const changePassword = (form: ChangePassState) =>
 		dispatch(setAlert("Password successfully changed!", AlertType.success));
 	});
 
-export const postForgotPassword = (form: IForgotPassState) =>
+export const postForgotPassword = (form: IForgotPassState, url: string) =>
 	catchAsync(async dispatch => {
-		await axios.post("/api/auth/forgotpassword", { email: form.email });
+		await axios.post("/api/auth/forgotpassword", { email: form.email, url });
 		dispatch(
 			setAlert(`Password reset link sent to ${form.email}.`, AlertType.success)
 		);
+	});
+
+export const patchResetPassword = (form: IResetPassState, resetToken: string) =>
+	catchAsync(async dispatch => {
+		const res = await axios.patch<IUser>(
+			`/api/auth/resetpassword/${resetToken}`,
+			form
+		);
+		dispatch<ResetPassAction>({
+			type: ActionTypes.resetPassword,
+			payload: res.data
+		});
+		// dispatch(setAlert("Password changed!", AlertType.success)); doesn't work as user is redirected
 	});

@@ -13,6 +13,7 @@ export const authReducer = (state = initialState, action: AuthActions) => {
 	switch (action.type) {
 		case ActionTypes.loginUser:
 		case ActionTypes.registerUser:
+		case ActionTypes.resetPassword:
 			return {
 				currentUser: action.payload,
 				isAuthenticated: true

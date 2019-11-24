@@ -4,7 +4,8 @@ import {
 	LoginAction,
 	LogoutAction,
 	RegUserAction,
-	ChangePassAction
+	ChangePassAction,
+	ResetPassAction
 } from "./auth";
 
 export enum ActionTypes {
@@ -19,7 +20,8 @@ export enum ActionTypes {
 	logoutUser = "LOGOUT_USER",
 	changePassword = "CHANGE_PASSWORD",
 	updateUser = "UPDATE_USER",
-	forgotPassword = "FORGOT_PASSWORD"
+	forgotPassword = "FORGOT_PASSWORD",
+	resetPassword = "RESET_PASSWORD"
 }
 
 // export type UserActions = ;
@@ -28,5 +30,6 @@ export type AuthActions =
 	| LogoutAction
 	| RegUserAction
 	| ChangePassAction
-	| UpdateUserAction;
+	| UpdateUserAction
+	| ResetPassAction;
 export type AlertActions = SetAlertAction | ResetAlertAction;
