@@ -10,13 +10,20 @@ import Register from "../auth/Register";
 import PublicRoute from "./PublicRoute";
 import ChangePassword from "../auth/ChangePassword";
 import UpdateMe from "../pages/UpdateMe";
+import ForgotPassword from "../auth/ForgotPassword";
 
 interface Props extends StoreState {}
 
 export const pubRoutesArr = [
-	{ name: "Home", path: "/", component: Home, nav: true },
+	{ name: "Home", path: "/", component: Home, nav: true }, // had to add nav:true for typescript to recognise nav property
 	{ name: "Login", path: "/login", component: Login },
-	{ name: "Register", path: "/register", component: Register }
+	{ name: "Register", path: "/register", component: Register },
+	{
+		name: "Forgot Password",
+		path: "/forgotpassword",
+		component: ForgotPassword,
+		nav: false
+	}
 ];
 
 export const privRoutesArr = [

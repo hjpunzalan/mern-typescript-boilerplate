@@ -36,7 +36,7 @@ class UpdateMe extends Component<Props, IUpdateMeState> {
 		const { firstName, lastName, email } = this.state;
 		return (
 			<div>
-				<h1>Register a User</h1>
+				<h1>Update your details</h1>
 				<hr />
 				<form onSubmit={this.handleSubmit}>
 					<label htmlFor="firstName">

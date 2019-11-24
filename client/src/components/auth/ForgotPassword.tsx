@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { postForgotPassword } from "../../actions";
 import Spinner from "../utils/Spinner/Spinner";
 
-interface Props {}
+interface Props {
+	postForgotPassword: (email: IForgotPassState) => Promise<void>;
+}
 export interface IForgotPassState {
 	loading?: boolean;
 	email: string;
@@ -23,12 +26,10 @@ class ForgotPassword extends Component<Props, IForgotPassState> {
 
 	handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { email, password } = this.state;
 		// Set loading to true which adds spinner
 		this.setState({ loading: true });
-
 		// Login user
-		this.props.postForgotPassword(email).then(() => {
+		this.props.postForgotPassword({ email: this.state.email }).then(() => {
 			// Refresh form
 			this.setState({ email: "", loading: false });
 		});
@@ -45,7 +46,7 @@ class ForgotPassword extends Component<Props, IForgotPassState> {
 					send you the link to reset your password.
 				</p>
 				<hr />
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={this.handleSubmit}>
 					<label htmlFor="email">
 						<b>Email</b>
 					</label>
@@ -64,4 +65,7 @@ class ForgotPassword extends Component<Props, IForgotPassState> {
 	}
 }
 
-export default connect()(ForgotPassword);
+export default connect(
+	null,
+	{ postForgotPassword }
+)(ForgotPassword);

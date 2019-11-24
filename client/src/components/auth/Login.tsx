@@ -4,6 +4,7 @@ import { postLogin } from "../../actions";
 import { StoreState } from "../../reducers";
 import { Redirect } from "react-router";
 import Spinner from "../utils/Spinner/Spinner";
+import { Link } from "react-router-dom";
 
 interface Props extends StoreState {
 	postLogin: (email: string, password: string) => Promise<void>;
@@ -51,30 +52,33 @@ class Login extends Component<Props, State> {
 				{this.state.loading ? (
 					<Spinner />
 				) : (
-					<form onSubmit={this.handleSubmit}>
-						<label htmlFor="email">
-							<b>Email</b>
-						</label>
-						<input
-							type="email"
-							name="email"
-							value={this.state.email}
-							onChange={this.handleChange}
-							required
-						/>
-						<label htmlFor="password">
-							<b>Password</b>
-						</label>
-						<input
-							type="password"
-							name="password"
-							value={this.state.password}
-							onChange={this.handleChange}
-							minLength={6}
-							required
-						/>
-						<button>Login</button>
-					</form>
+					<>
+						<form onSubmit={this.handleSubmit}>
+							<label htmlFor="email">
+								<b>Email</b>
+							</label>
+							<input
+								type="email"
+								name="email"
+								value={this.state.email}
+								onChange={this.handleChange}
+								required
+							/>
+							<label htmlFor="password">
+								<b>Password</b>
+							</label>
+							<input
+								type="password"
+								name="password"
+								value={this.state.password}
+								onChange={this.handleChange}
+								minLength={6}
+								required
+							/>
+							<button>Login</button>
+						</form>
+						<Link to="/forgotpassword">Forgot your password?</Link>
+					</>
 				)}
 			</div>
 		);
