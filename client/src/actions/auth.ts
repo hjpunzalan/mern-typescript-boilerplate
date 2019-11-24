@@ -1,3 +1,4 @@
+import { IForgotPassState } from "./../components/auth/ForgotPassword";
 import { ChangePassState } from "./../components/auth/ChangePassword";
 import axios from "axios";
 import { ActionTypes } from "./types";
@@ -74,4 +75,12 @@ export const changePassword = (form: ChangePassState) =>
 		});
 
 		dispatch(setAlert("Password successfully changed!", AlertType.success));
+	});
+
+export const postForgotPassword = (form: IForgotPassState) =>
+	catchAsync(async dispatch => {
+		await axios.post("/api/auth/forgotpassword", { email: form.email });
+		dispatch(
+			setAlert(`Password reset link sent to ${form.email}.`, AlertType.success)
+		);
 	});

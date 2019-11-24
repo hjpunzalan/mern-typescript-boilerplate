@@ -18,7 +18,8 @@ export enum ActionTypes {
 	loginUser = "LOGIN_USER",
 	logoutUser = "LOGOUT_USER",
 	changePassword = "CHANGE_PASSWORD",
-	updateUser = "UPDATE_USER"
+	updateUser = "UPDATE_USER",
+	forgotPassword = "FORGOT_PASSWORD"
 }
 
 // export type UserActions = ;
