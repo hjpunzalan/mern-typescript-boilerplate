@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { changePassword } from "../../actions";
 import Spinner from "../utils/Spinner/Spinner";
 import { StoreState } from "../../reducers";
+import { RouterProps } from "react-router";
 
-interface Props extends StoreState {
+interface Props extends StoreState, RouterProps {
 	changePassword: (form: ChangePassState) => Promise<void>;
 }
 export interface ChangePassState {
