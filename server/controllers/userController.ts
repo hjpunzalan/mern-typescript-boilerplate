@@ -13,7 +13,7 @@ import { Users } from "../models/Users";
 import { bodyValidator } from "../middlewares/bodyValidator";
 import { QueryHandling } from "./../utils/queryHandling";
 import { requireAuth } from "../middlewares/requireAuth";
-import { checkBody } from "./../middlewares/checkBody";
+import { checkBody } from "../utils/checkBody";
 
 export const userRoute = Router();
 
@@ -63,12 +63,11 @@ class UserController {
 	async updateMe(req: Request, res: Response, next: NextFunction) {
 		// Update user document
 		//   Since body is of any type, checkBody ignore other object keys not specified
-		const filterBody = checkBody(req.body, next, [
-			"firstName",
-			"lastName",
-			"email",
-			"photo"
-		]);
+		const filterBody = checkBody(
+			req.body,
+			["firstName", "lastName", "email", "photo"],
+			next
+		);
 		if (req.session) {
 			const user = await Users.findByIdAndUpdate(
 				req.session.userId,
