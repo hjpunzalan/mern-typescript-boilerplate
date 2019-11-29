@@ -11,13 +11,31 @@ interface Props extends RouteProps {
 }
 
 class PrivateRoute extends Route<Props> {
+	componentDidMount() {
+		// Log user out if session expires
+		if (this.props.isAuthenticated)
+			Axios.get<boolean>("/api/auth/isloggedin")
+				.then(res => {
+					if (!res.data) this.props.sessionExpired();
+					else return;
+				})
+				.catch(err => {
+					console.error(err);
+					this.props.sessionExpired();
+				});
+	}
 	componentDidUpdate() {
 		// Log user out if session expires
 		if (this.props.isAuthenticated)
-			Axios.get<boolean>("/api/auth/isloggedin").then(res => {
-				if (res.data === false) this.props.sessionExpired();
-				else return;
-			});
+			Axios.get<boolean>("/api/auth/isloggedin")
+				.then(res => {
+					if (res.data === false) this.props.sessionExpired();
+					else return;
+				})
+				.catch(err => {
+					console.error(err);
+					this.props.sessionExpired();
+				});
 	}
 	public render() {
 		return !this.props.isAuthenticated ? (
