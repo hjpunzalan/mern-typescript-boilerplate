@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, RouteProps } from "react-router-dom";
+import { Route, RouteProps, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { ActionTypes } from "../../actions";
 import { Dispatch } from "redux";
@@ -21,7 +21,11 @@ class PublicRoute extends Component<Props> {
 	}
 
 	render() {
-		return <Route {...this.props} />;
+		return this.props.isAuthenticated ? (
+			<Redirect to="/dashboard" />
+		) : (
+			<Route {...this.props} />
+		);
 	}
 }
 

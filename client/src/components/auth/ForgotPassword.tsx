@@ -47,19 +47,18 @@ class ForgotPassword extends Component<Props, IForgotPassState> {
 					Please enter the email address registered to your account and we will
 					send you the link to reset your password.
 				</p>
-				<hr />
 				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="email">
+					<label>
 						<b>Email</b>
+						<input
+							type="text"
+							placeholder="Enter Email"
+							name="email"
+							value={this.state.email}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="text"
-						placeholder="Enter Email"
-						name="email"
-						value={this.state.email}
-						onChange={this.handleChange}
-						required
-					/>
 					<input type="submit" value="Send to email" />
 				</form>
 			</div>

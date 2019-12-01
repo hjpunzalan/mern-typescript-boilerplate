@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps, Redirect } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { patchResetPassword } from "../../actions";
 import Spinner from "../utils/Spinner/Spinner";
 import { StoreState } from "../../reducers";
@@ -60,46 +60,42 @@ class ResetPassword extends Component<Props, IResetPassState> {
 	render() {
 		return this.state.loading ? (
 			<Spinner />
-		) : this.props.auth.isAuthenticated ? (
-			<Redirect to="/dashboard" />
 		) : (
 			<div>
 				<h1>Reset your password</h1>
-				<p className="Form__text">Please enter a new password below.</p>
+				<p>Please enter a new password below.</p>
 				<hr />
 				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="newPassword">
-						<b>Password</b>
-					</label>
-					<input
-						type="password"
-						placeholder="Enter a new Password"
-						name="newPassword"
-						value={this.state.newPassword}
-						onChange={this.handleChange}
-						minLength={6}
-						autoComplete="on"
-						required
-					/>
-					<label htmlFor="confirmPassword">
-						<b>Confirm Password</b>
-					</label>
-					<input
-						type="password"
-						placeholder="Confirm password"
-						name="confirmPassword"
-						value={this.state.confirmPassword}
-						onChange={this.handleChange}
-						minLength={6}
-						required
-					/>
-					<div>
+					<label>
+						<span>Password</span>
 						<input
-							type="submit"
-							className="btn btn__submit"
-							value="Set new password"
+							type="password"
+							placeholder="Enter a new Password"
+							name="newPassword"
+							value={this.state.newPassword}
+							onChange={this.handleChange}
+							minLength={6}
+							autoComplete="on"
+							required
 						/>
-					</div>
+					</label>
+					<label>
+						<span>Confirm Password</span>
+						<input
+							type="password"
+							placeholder="Confirm password"
+							name="confirmPassword"
+							value={this.state.confirmPassword}
+							onChange={this.handleChange}
+							minLength={6}
+							required
+						/>
+					</label>
+					<input
+						type="submit"
+						className="btn btn__submit"
+						value="Set new password"
+					/>
 				</form>
 			</div>
 		);

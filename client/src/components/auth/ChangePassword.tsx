@@ -57,39 +57,39 @@ class ChangePassword extends Component<Props, ChangePassState> {
 					<Spinner />
 				) : (
 					<form onSubmit={this.handleSubmit}>
-						<label htmlFor="currentPassword">
-							<b>Current Password</b>
+						<label>
+							<span>Current Password</span>
+							<input
+								type="password"
+								name="currentPassword"
+								value={this.state.currentPassword}
+								onChange={this.handleChange}
+								minLength={6}
+								required
+							/>
 						</label>
-						<input
-							type="password"
-							name="currentPassword"
-							value={this.state.currentPassword}
-							onChange={this.handleChange}
-							minLength={6}
-							required
-						/>
-						<label htmlFor="newPassword">
-							<b>New Password</b>
+						<label>
+							<span>New Password</span>
+							<input
+								type="password"
+								name="newPassword"
+								value={this.state.newPassword}
+								onChange={this.handleChange}
+								minLength={6}
+								required
+							/>
 						</label>
-						<input
-							type="password"
-							name="newPassword"
-							value={this.state.newPassword}
-							onChange={this.handleChange}
-							minLength={6}
-							required
-						/>
-						<label htmlFor="confirmPassword">
-							<b>Confirm New Password</b>
+						<label>
+							<span>Confirm New Password</span>
+							<input
+								type="password"
+								name="confirmPassword"
+								value={this.state.confirmPassword}
+								onChange={this.handleChange}
+								minLength={6}
+								required
+							/>
 						</label>
-						<input
-							type="password"
-							name="confirmPassword"
-							value={this.state.confirmPassword}
-							onChange={this.handleChange}
-							minLength={6}
-							required
-						/>
 						<button>Change Password</button>
 					</form>
 				)}

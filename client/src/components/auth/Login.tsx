@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { postLogin } from "../../actions";
 import { StoreState } from "../../reducers";
-import { Redirect } from "react-router";
 import Spinner from "../utils/Spinner/Spinner";
 import { Link } from "react-router-dom";
 
@@ -44,9 +43,7 @@ class Login extends Component<Props, State> {
 	};
 
 	render() {
-		return this.props.auth.isAuthenticated ? (
-			<Redirect to="/dashboard" />
-		) : (
+		return (
 			<div>
 				<h1>Login page</h1>
 				{this.state.loading ? (
@@ -54,27 +51,27 @@ class Login extends Component<Props, State> {
 				) : (
 					<>
 						<form onSubmit={this.handleSubmit}>
-							<label htmlFor="email">
-								<b>Email</b>
+							<label>
+								<span>Email</span>
+								<input
+									type="email"
+									name="email"
+									value={this.state.email}
+									onChange={this.handleChange}
+									required
+								/>
 							</label>
-							<input
-								type="email"
-								name="email"
-								value={this.state.email}
-								onChange={this.handleChange}
-								required
-							/>
-							<label htmlFor="password">
-								<b>Password</b>
+							<label>
+								<span>Password</span>
+								<input
+									type="password"
+									name="password"
+									value={this.state.password}
+									onChange={this.handleChange}
+									minLength={6}
+									required
+								/>
 							</label>
-							<input
-								type="password"
-								name="password"
-								value={this.state.password}
-								onChange={this.handleChange}
-								minLength={6}
-								required
-							/>
 							<button>Login</button>
 						</form>
 						<Link to="/forgotpassword">Forgot your password?</Link>

@@ -39,8 +39,8 @@ class UpdateMe extends Component<Props, IUpdateMeState> {
 				<h1>Update your details</h1>
 				<hr />
 				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="firstName">
-						<b>First Name</b>
+					<label>
+						<span>First Name</span>
 					</label>
 					<input
 						type="text"
@@ -50,35 +50,33 @@ class UpdateMe extends Component<Props, IUpdateMeState> {
 						onChange={this.handleChange}
 						required
 					/>
-					<label htmlFor="lastName">
-						<b>Last Name</b>
+					<label>
+						<span>Last Name</span>
+						<input
+							type="text"
+							placeholder="Enter last name"
+							name="lastName"
+							value={lastName}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="text"
-						placeholder="Enter last name"
-						name="lastName"
-						value={lastName}
-						onChange={this.handleChange}
-						required
-					/>
-					<label htmlFor="email">
-						<b>Email</b>
+					<label>
+						<span>Email</span>
+						<input
+							type="email"
+							placeholder="Enter Email"
+							name="email"
+							value={email}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="email"
-						placeholder="Enter Email"
-						name="email"
-						value={email}
-						onChange={this.handleChange}
-						required
-					/>
 
-					<div className="Form__btns">
-						<button className="btn" onClick={this.handleCancel}>
-							Clear
-						</button>
-						<input type="submit" className="btn btn__submit" value="Update" />
-					</div>
+					<button className="btn" onClick={this.handleCancel}>
+						Clear
+					</button>
+					<input type="submit" className="btn btn__submit" value="Update" />
 				</form>
 			</div>
 		);

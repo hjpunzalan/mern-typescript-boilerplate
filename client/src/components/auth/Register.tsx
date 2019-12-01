@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { registerUser, IUser } from "../../actions";
-import { Redirect } from "react-router";
 import { StoreState } from "../../reducers";
 
 interface Props extends StoreState {
@@ -37,64 +36,59 @@ class Register extends Component<Props, IRegisterState> {
 
 	render() {
 		const { firstName, lastName, email, password } = this.state;
-		return this.props.auth.isAuthenticated ? (
-			<Redirect to="/dashboard" />
-		) : (
+		return (
 			<div>
 				<h1>Register a User</h1>
-				<hr />
 				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="firstName">
-						<b>First Name</b>
+					<label>
+						<span>First Name</span>
+						<input
+							type="text"
+							placeholder="Enter first name"
+							name="firstName"
+							value={firstName}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="text"
-						placeholder="Enter first name"
-						name="firstName"
-						value={firstName}
-						onChange={this.handleChange}
-						required
-					/>
-					<label htmlFor="lastName">
-						<b>Last Name</b>
+					<label>
+						<span>Last Name</span>
+						<input
+							type="text"
+							placeholder="Enter last name"
+							name="lastName"
+							value={lastName}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="text"
-						placeholder="Enter last name"
-						name="lastName"
-						value={lastName}
-						onChange={this.handleChange}
-						required
-					/>
-					<label htmlFor="email">
-						<b>Email</b>
+					<label>
+						<span>Email</span>
+						<input
+							type="email"
+							placeholder="Enter Email"
+							name="email"
+							value={email}
+							onChange={this.handleChange}
+							required
+						/>
 					</label>
-					<input
-						type="email"
-						placeholder="Enter Email"
-						name="email"
-						value={email}
-						onChange={this.handleChange}
-						required
-					/>
-					<label htmlFor="password">
-						<b>Password</b>
+					<label>
+						<span>Password</span>
+						<input
+							type="password"
+							placeholder="Enter Password"
+							name="password"
+							value={password}
+							onChange={this.handleChange}
+							minLength={6}
+							required
+						/>
 					</label>
-					<input
-						type="password"
-						placeholder="Enter Password"
-						name="password"
-						value={password}
-						onChange={this.handleChange}
-						minLength={6}
-						required
-					/>
-					<div className="Form__btns">
-						<button className="btn" onClick={this.handleCancel}>
-							Clear
-						</button>
-						<input type="submit" className="btn btn__submit" value="Register" />
-					</div>
+					<button className="btn" onClick={this.handleCancel}>
+						Clear
+					</button>
+					<input type="submit" className="btn btn__submit" value="Register" />
 				</form>
 			</div>
 		);
