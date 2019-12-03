@@ -2,19 +2,23 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { registerUser, IUser } from "../../actions";
 import { StoreState } from "../../reducers";
+import { RouterProps } from "react-router";
 
-interface Props extends StoreState {
+interface Props extends StoreState, RouterProps {
 	registerUser: (form: IRegisterState) => Promise<void>;
 }
 
-export interface IRegisterState extends IUser {}
+export interface IRegisterState extends IUser {
+	pathname: string;
+}
 
 class Register extends Component<Props, IRegisterState> {
 	state = {
 		firstName: "",
 		lastName: "",
 		email: "",
-		password: ""
+		password: "",
+		pathname: this.props.history.location.pathname
 	};
 
 	handleChange = (e: { target: HTMLInputElement }) => {
@@ -30,7 +34,8 @@ class Register extends Component<Props, IRegisterState> {
 		this.props.registerUser(this.state).then(() => {
 			// If register fails invalid
 			// clear password
-			if (!this.props.auth.isAuthenticated) this.setState({ password: "" });
+			if (this.props.history.location.pathname === this.state.pathname)
+				this.setState({ password: "" });
 		});
 	};
 

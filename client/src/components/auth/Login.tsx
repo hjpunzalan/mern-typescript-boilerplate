@@ -4,21 +4,24 @@ import { postLogin } from "../../actions";
 import { StoreState } from "../../reducers";
 import Spinner from "../utils/Spinner/Spinner";
 import { Link } from "react-router-dom";
+import { RouterProps } from "react-router";
 
-interface Props extends StoreState {
+interface Props extends StoreState, RouterProps {
 	postLogin: (email: string, password: string) => Promise<void>;
 }
 interface State {
 	email: string;
 	password: string;
 	loading: boolean;
+	pathname: string;
 }
 
 class Login extends Component<Props, State> {
 	state = {
 		email: "",
 		password: "",
-		loading: false
+		loading: false,
+		pathname: this.props.history.location.pathname
 	};
 
 	handleChange = (e: { target: HTMLInputElement }) => {
@@ -37,7 +40,9 @@ class Login extends Component<Props, State> {
 		// Login user
 		this.props.postLogin(email, password).then(() => {
 			// Refresh form if authentication fails
-			if (!this.props.auth.isAuthenticated)
+			// isAuthenticated is only updated after updating the store's state
+			// This callback is called straight after the action which is before the latter
+			if (this.props.history.location.pathname === this.state.pathname)
 				this.setState({ email: "", password: "", loading: false });
 		});
 	};

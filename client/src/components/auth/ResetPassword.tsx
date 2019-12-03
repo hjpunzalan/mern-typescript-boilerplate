@@ -18,13 +18,15 @@ export interface IResetPassState {
 	loading?: boolean;
 	newPassword: string;
 	confirmPassword: string;
+	pathname?: string;
 }
 
 class ResetPassword extends Component<Props, IResetPassState> {
 	state = {
 		loading: false,
 		newPassword: "",
-		confirmPassword: ""
+		confirmPassword: "",
+		pathname: this.props.history.location.pathname
 	};
 
 	handleChange = (e: { target: HTMLInputElement }) => {
@@ -49,11 +51,12 @@ class ResetPassword extends Component<Props, IResetPassState> {
 			)
 			.then(() => {
 				// Refresh form if error received
-				this.setState({
-					newPassword: "",
-					confirmPassword: "",
-					loading: false
-				});
+				if (this.props.history.location.pathname === this.state.pathname)
+					this.setState({
+						newPassword: "",
+						confirmPassword: "",
+						loading: false
+					});
 			});
 	};
 
